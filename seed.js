@@ -22,6 +22,9 @@ async function main() {
     await restaurantsData.create("Il Tavolo di Palmisano", "700 Clinton St, Hoboken, NJ 07030", "tavolo@gmail.com", "201-345-5980",
         "Italian restaurant",
         "testpassword");
+    await customersData.create("Andrew", "Johnson", "ajohnso4@stevens.edu", "484-522-8181", "Hoboken", "NJ", "password");
+    await customersData.create("Ali", "Kolenovic", "akolenovic@stevens.edu", "201-916-1502", "Hoboken", "NJ", "password");
+    console.log('seeded!');
 }
 
 main();
