@@ -69,6 +69,18 @@ const getAll = async function getAll() {
     return customersList;
 }
 
+const getfromEmail = async function getUsername(email) {
+    if(!email) throw 'Username must be provided!';
+    if(typeof email != 'string' || email.trim() == '') throw 'Username must be a valid String!';
+    let customersList = await customersCollection.find({}).toArray();
+    for(customer of customersList){
+        if(email == customer.email){
+            return customer._id.toString();
+        }
+    } 
+    return -1;
+}
+
 const update = async function update(id, updatedCustomer) {
     const customersCollection = await customers();
     if (id === undefined || updatedCustomer === undefined) {
@@ -158,5 +170,6 @@ module.exports = {
     get,
     getAll,
     update,
-    remove
+    remove,
+    getfromEmail
 }
