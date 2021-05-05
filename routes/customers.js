@@ -27,6 +27,14 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+router.post('/private'), async (req, res) => {
+    user = req.session.user;
+    /*
+    Go to account screen
+    res.render("users/account", {user, title: "Account Screen"});
+    */
+}
+
 router.post('/', async (req, res) => {
     let customer = req.body;
     try{
@@ -73,6 +81,11 @@ router.post("/login", async (req, res) =>{
     }else{
         res.render("users/login", {title: "Login Screen", error: "Invalid Login Information"});
     }
+});
+
+router.get("/logout", (req, res) => {
+    res.clearCookie('name');
+    res.redirect('/');
 });
 
 module.exports = router;
