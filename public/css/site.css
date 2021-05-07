@@ -59,3 +59,22 @@ p {
 	font-size: 1rem;
 	line-height: 2;
 }
+
+.footer {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color:lightgreen;
+	color: black;
+	text-align: center;
+}
+
+.header{
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color:lightgreen;
+	color: black;
+	text-align: center;
+}
