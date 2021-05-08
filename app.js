@@ -31,7 +31,7 @@ app.use( async(req, res, next) =>{
 
 app.use("/restaurants/register", (req, res, next) =>{
   if(!req.session.restaurant){
-    res.status(403).render("restaurants/register", {layouts: false})
+    res.status(403).render("restaurants/register", {layout: false})
   } else {
     next();
   }

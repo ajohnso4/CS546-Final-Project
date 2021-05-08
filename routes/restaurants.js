@@ -29,10 +29,13 @@ router.get('/:id', async (req, res) => {
 });
 
 
-router.get('/signup', async(req, res) => {
-    console.log("asdfghjk")
-    res.render("layouts/main")
-})
+// router.get('/register', async(req, res) => {
+//     if(req.session.restaurant){
+//         res.redirect("/")
+//     } else{
+//     res.render("restaurants/register", {layout:false})
+//     }
+// })
 
 
 router.post('/login', async(req, res) => {
