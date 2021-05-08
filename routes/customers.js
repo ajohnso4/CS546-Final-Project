@@ -3,6 +3,7 @@ const { customers } = require('../config/mongoCollections');
 const router = express.Router();
 const customerData = require('../data/customers');
 const reviewsData = require('../data/reviews');
+const bcryptjs = require('bcryptjs');
 
 router.get('/', async (req, res) => {
     let customers = await customerData.getAll();
@@ -29,8 +30,15 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     let customer = req.body;
+    var password;
+    bcryptjs.genSalt(16, function(err, salt) {
+        bcryptjs.hash(customer.passwordHash, salt, null, function(err, hash) {
+            password = hash;
+        })
+    })
     try{
-        await customerData.create(customer.firstName, customer.lastName, customer.email, customer.phone, customer.city, customer.state, customer.passwordHash);
+        await customerData.create(customer.firstName, customer.lastName, customer.email, customer.phone, customer.city, customer.state, password);
+        
     }catch(e){
         res.status(500).json({error: e});
     }

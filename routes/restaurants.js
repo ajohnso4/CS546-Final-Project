@@ -3,6 +3,7 @@ const { restaurants } = require('../config/mongoCollections');
 const router = express.Router();
 const restaurantData = require('../data/restaurants');
 const reviewsData = require('../data/reviews');
+const bcryptjs = require('bcryptjs');
 
 router.get('/', async (req, res) => {
     let restaurant = await restaurantData.getAll();
@@ -47,9 +48,15 @@ router.post('/', async (req, res) => {
     if (!restaurant.passwordHash) {
         res.status(400).json({error: 'You must provide a password!'});
     }
+    var password;
+    bcryptjs.genSalt(16, function(err, salt) {
+        bcryptjs.hash(restaurant.passwordHash, salt, null, function(err, hash) {
+            password = hash;
+        })
+    })
     try{
         await restaurantData.create(restaurant.name, restaurant.address, restaurant.email, restaurant.phone,
-                                        restaurant.description, restaurant.passwordHash);
+                                        restaurant.description, password);
     }catch(e){
         res.status(500).json({error: e});
     }
