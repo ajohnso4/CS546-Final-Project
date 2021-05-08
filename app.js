@@ -6,6 +6,37 @@ const session = require("express-session");
 const static = express.static(__dirname + "/public");
 app.use("/public", static);
 
+app.use(
+  session({
+    name: "AuthCookie",
+    secret: "Secret Session",
+    saveUninitialized: true,
+    resave: false,
+  })
+);
+
+app.use( async(req, res, next) =>{
+    console.log("Current Timestamp: " +new Date().toUTCString());
+    console.log("Request Method: " + req.method);
+    console.log("Request Route: " + req.originalUrl);
+    
+    if(req.session.restaurant){
+        console.log("Authenticated User")
+    } else {
+        console.log("Non-Authenticated User")
+    }
+    console.log()
+    next();
+});
+
+app.use("/restaurants/register", (req, res, next) =>{
+  if(!req.session.restaurant){
+    res.status(403).render("restaurants/register", {layouts: false})
+  } else {
+    next();
+  }
+})
+
 const exphbs = require("express-handlebars");
 
 app.use(express.json());
