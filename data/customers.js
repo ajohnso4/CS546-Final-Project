@@ -59,7 +59,12 @@ const get = async function get(id) {
     customer._id = customer._id.toString();
     return customer;
 }
-
+const getId = async function getId(name) {
+    const customersCollection = await restaurants();
+    var customer =  await customersCollection.findOne({ name: name});
+    customer = customer._id;
+    return customer
+}
 const getAll = async function getAll() {
     const customersCollection = await customers();
     let customersList = await customersCollection.find({}).toArray();
@@ -156,6 +161,7 @@ const remove = async function remove(id) {
 module.exports = {
     create,
     get,
+    getId,
     getAll,
     update,
     remove
