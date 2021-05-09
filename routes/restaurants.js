@@ -28,7 +28,44 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+
+// router.get('/register', async(req, res) => {
+//     if(req.session.restaurant){
+//         res.redirect("/")
+//     } else{
+//     res.render("restaurants/register", {layout:false})
+//     }
+// })
+
+
+router.post('/login', async(req, res) => {
+    let restaurantName = req.body.restaurantName;
+    let password = req.body.password;
+
+    let restaurant = restaurantData.getId(restaurantName);
+
+    if(restaurant){
+
+        let validPwd = await bcryptjs.compareSync(password, restaurant.passwordHash);
+        if(!validPwd){
+            res.status(401).render("restaurants/login",{layouts: false, errors:["Invalid password"], hasError: this.true});
+            return;
+        }
+       
+        req.session.restaurant = restaurantName;
+        res.redirect("/private");
+    }
+
+    if(!req.session.restaurant){
+        res.status(401).render("restaurants/login", {layouts: false,
+            errors: ['Provide username', 'Provide password'], hasError: true
+        })
+        return;
+    }
+    
+})
+
+router.post('/register', async (req, res) => {
     let restaurant = req.body;
     if (!restaurant.name) {
         res.status(400).json({error: 'You must provide a name!'});
