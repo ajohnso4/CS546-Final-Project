@@ -8,7 +8,7 @@ const bcryptjs = require('bcryptjs');
 router.get('/', async (req, res) => {
     let restaurant = await restaurantData.getAll();
     try{
-        res.json(customers);
+        res.json(restaurant);
     }catch(e){
         res.status(404).json({error: e});
     }
@@ -67,24 +67,6 @@ router.post('/login', async(req, res) => {
 
 router.post('/register', async (req, res) => {
     let restaurant = req.body;
-    if (!restaurant.name) {
-        res.status(400).json({error: 'You must provide a name!'});
-    }
-    if (!restaurant.address) {
-        res.status(400).json({error: 'You must provide an address!'});
-    }
-    if (!restaurant.email) {
-        res.status(400).json({error: 'You must provide an email!'});
-    }
-    if (!restaurant.phone) {
-        res.status(400).json({error: 'You must provide a phone number!'});
-    }
-    if (!restaurant.description) {
-        res.status(400).json({error: 'You must provide a description!'});
-    }
-    if (!restaurant.passwordHash) {
-        res.status(400).json({error: 'You must provide a password!'});
-    }
     var password;
     bcryptjs.genSalt(16, function(err, salt) {
         bcryptjs.hash(restaurant.passwordHash, salt, null, function(err, hash) {
