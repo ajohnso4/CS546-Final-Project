@@ -126,6 +126,7 @@ const getAllFromRestaurant = async function getAllFromRestaurant(id) {
         throw "ID is invalid.";
     }
     let restaurant = await restaurantsData.get(id.toString());
+    
     return restaurant.reservations;
 }
 // removes a reservation from both the customer and restaurant
