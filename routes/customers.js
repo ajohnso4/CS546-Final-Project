@@ -7,12 +7,7 @@ const bcryptjs = require('bcryptjs');
 
 router.get('/', async (req, res) => {
     let customers = await customerData.getAll();
-    if(req.cookies.name === "AuthCookie"){
-        res.redirect("/private");
-    }else{
-        res.render("users/login");
-        // res.redirect("/login");
-    }
+    return customers;
 });
 
 router.get('/:id', async (req, res) => {
@@ -65,6 +60,14 @@ router.patch('/:id', async (req, res) => {
     }
 });
 
+router.get('/login', async(req, res) => {
+    if(req.cookies.name === "AuthCookie"){
+        res.redirect("/private");
+    }else{
+        res.render("users/login");
+    }
+})
+
 router.post("/login", async (req, res) =>{
     let email = req.body.email;
     let password = req.body.password;
@@ -85,6 +88,10 @@ router.post("/login", async (req, res) =>{
     }else{
         res.render("users/login", {title: "Login Screen", error: "Invalid Login Information"});
     }
+});
+
+router.get('/register', async (req, res) => {
+    res.render('users/signup');
 });
 
 router.get("/logout", (req, res) => {

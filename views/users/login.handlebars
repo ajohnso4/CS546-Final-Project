@@ -1,6 +1,9 @@
-<div class="container">
+<!DOCTYPE html>
+<html>
+    <body>
+    <div class="container">
     <h1 class="Login">Login</h1>
-    <form method="POST" action="/users/login" id="login-form">
+    <form method="POST" action="/customers/login" id="login-form">
         <label  for="Email">Email</label>
         <input class="form-control" type="text" id="Email" name="Email" placeholder="Email" required/> 
         <label  for="password">Password</label>
@@ -10,4 +13,7 @@
             <div class = "error" id="errors">{{this}}</div>
         {{/each}}
     </form>
+    <a href="/users/signup">Don't have an account? Click Here!</a>
 </div>
+</body>
+</html>

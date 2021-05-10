@@ -6,7 +6,7 @@ const constructorMethod = (app) => {
     app.use('/customers', customers);
     app.use('/restaurants', restaurants);
     app.get('/', (req, res) => {
-        res.render(path.resolve("views/layouts/main"));
+        res.render(resolvepath('views/layouts/main'));
     })
     app.use('*', (req, res) => {
         res.status(404).json({error: 'Not found'});
