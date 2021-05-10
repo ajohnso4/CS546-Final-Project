@@ -7,10 +7,11 @@ const bcryptjs = require('bcryptjs');
 
 router.get('/', async (req, res) => {
     let customers = await customerData.getAll();
-    try{
-        res.json(customers);
-    }catch(e){
-        res.status(404).json({error: e});
+    if(req.cookies.name === "AuthCookie"){
+        res.redirect("/private");
+    }else{
+        res.render("users/login");
+        // res.redirect("/login");
     }
 });
 
@@ -30,10 +31,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/private'), async (req, res) => {
     user = req.session.user;
-    /*
-    Go to account screen
-    res.render("users/account", {user, title: "Account Screen"});
-    */
+    res.render("users/login");
 }
 
 router.post('/', async (req, res) => {
@@ -45,7 +43,6 @@ router.post('/', async (req, res) => {
         })
     })
     try{
-        let passwordHash = 10;
         await customerData.create(customer.firstName, customer.lastName, customer.email, customer.phone, customer.city, customer.state, customer.passwordHash);
     }catch(e){
         res.status(500).json({error: e});
@@ -76,7 +73,7 @@ router.post("/login", async (req, res) =>{
         if(userID != -1){
             let user = await users.passwordCorrect(userID, password);
             if(user == false){
-                res.render("users/login", {title: "Login Screen", error: "Password is incorrect"});
+                res.render("users/login", {error: "Password is incorrect"});
             }else{
                 res.cookie("name", "AuthCookie");
                 req.session.user = user;
