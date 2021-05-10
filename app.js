@@ -21,10 +21,10 @@ app.use( async(req, res, next) =>{
   let requestRoutes = req.originalUrl;
   let Authenticated;
   
-  if(req.session.restaurant){
+  if(req.session.restaurant || req.session.customer){
     Authenticated="Authenticated User"
   } else {
-     Authenticated="Non-Authenticated User"
+    Authenticated="Non-Authenticated User"
   }
   console.log(`[${currentTimestamp}]: ${requestMethod} ${requestRoutes} (${Authenticated})`)
   next();
