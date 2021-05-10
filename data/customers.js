@@ -60,7 +60,7 @@ const get = async function get(id) {
     return customer;
 }
 const getId = async function getId(name) {
-    const customersCollection = await restaurants();
+    const customersCollection = await customers();
     var customer =  await customersCollection.findOne({ name: name});
     customer = customer._id;
     return customer

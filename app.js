@@ -33,11 +33,19 @@ app.use( async(req, res, next) =>{
 
 app.use("/restaurants/login", (req, res, next) => {
   if (!req.session.restaurant) {
-    return res.status(403).render("restaurants/login", {layout: false})
+    return res.status(200).render("restaurants/login", {layout: false})
   } else {
     next();
   }
-})
+});
+
+app.use("/customers/login", (req, res, next) => {
+  if(!req.session.customer) {
+    return res.status(200).render("users/login", {errors: []});
+  }else{
+    next();
+  }
+});
 
 const exphbs = require("express-handlebars");
 

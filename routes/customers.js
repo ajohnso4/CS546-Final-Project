@@ -3,25 +3,11 @@ const { customers } = require('../config/mongoCollections');
 const router = express.Router();
 const customerData = require('../data/customers');
 const reviewsData = require('../data/reviews');
-const bcryptjs = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
 router.get('/', async (req, res) => {
     let customers = await customerData.getAll();
     return customers;
-});
-
-router.get('/:id', async (req, res) => {
-    let customer;
-    try{
-        customer = await customerData.get(req.params.id);
-    }catch(e){
-        res.status(500).json({error: e});
-    }
-    try{
-        res.json(customer);
-    }catch(e){
-        res.status(404).json({error: e});
-    }
 });
 
 router.post('/private'), async (req, res) => {
@@ -29,11 +15,11 @@ router.post('/private'), async (req, res) => {
     res.render("users/login");
 }
 
-router.post('/', async (req, res) => {
+router.post('/register', async (req, res) => {
     let customer = req.body;
     var password;
-    bcryptjs.genSalt(16, function(err, salt) {
-        bcryptjs.hash(customer.passwordHash, salt, null, function(err, hash) {
+    bcrypt.genSalt(16, function(err, salt) {
+        bcrypt.hash(customer.passwordHash, salt, null, function(err, hash) {
             password = hash;
         })
     })
@@ -44,29 +30,13 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
-    try{
-        let customer = await customerData.remove(req.params.id);
-    }catch(e){
-        res.status(500).json({error: e});
-    }
-});
-
-router.patch('/:id', async (req, res) => {
-    try{
-        await customerData.update(req.params.id, req.body);
-    }catch(e){
-        res.status(500).json({error: e});
-    }
-});
-
-router.get('/login', async(req, res) => {
-    if(req.cookies.name === "AuthCookie"){
-        res.redirect("/private");
-    }else{
-        res.render("users/login");
-    }
-})
+// router.get('/login', async(req, res) => {
+//     if(req.cookies.name === "AuthCookie"){
+//         res.redirect("/private");
+//     }else{
+//         res.render("users/login");
+//     }
+// })
 
 router.post("/login", async (req, res) =>{
     let email = req.body.email;
@@ -97,6 +67,36 @@ router.get('/register', async (req, res) => {
 router.get("/logout", (req, res) => {
     res.clearCookie('name');
     res.redirect('/');
+});
+
+router.get('/:id', async (req, res) => {
+    let customer;
+    try{
+        customer = await customerData.get(req.params.id);
+    }catch(e){
+        res.status(500).json({error: e});
+    }
+    try{
+        res.json(customer);
+    }catch(e){
+        res.status(404).json({error: e});
+    }
+});
+
+router.delete('/:id', async (req, res) => {
+    try{
+        let customer = await customerData.remove(req.params.id);
+    }catch(e){
+        res.status(500).json({error: e});
+    }
+});
+
+router.patch('/:id', async (req, res) => {
+    try{
+        await customerData.update(req.params.id, req.body);
+    }catch(e){
+        res.status(500).json({error: e});
+    }
 });
 
 module.exports = router;
