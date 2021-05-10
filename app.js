@@ -38,7 +38,6 @@ app.use("/restaurants/login", (req, res, next) => {
   }
 });
 
-
 const exphbs = require("express-handlebars");
 
 app.use(express.json());
