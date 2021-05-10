@@ -15,7 +15,7 @@ const create = async function create(firstName, lastName, email, phone, city, st
         phone.replace(/\s/g, "") === "" || city.replace(/\s/g, "") === "" || state.replace(/\s/g, "") === "" || passwordHash.replace(/\s/g, "") === "") {
         throw "Parameters cannot be empty strings.";
     }
-    let regex = /^\d{3}-\d{3}-\d{4}$/;
+    let regex = /^\d{3}\d{3}\d{4}$/;
     if (!regex.test(phone)) {
         throw "Phone number is in wrong format.";
     }

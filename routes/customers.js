@@ -7,56 +7,58 @@ const bcrypt = require('bcrypt');
 
 router.get('/', async (req, res) => {
     let customers = await customerData.getAll();
-    return customers;
+    res.json(customers);
 });
 
 router.post('/private'), async (req, res) => {
     user = req.session.user;
-    res.render("users/login");
+    res.render("users/profile", {customer: user});
 }
 
 router.post('/register', async (req, res) => {
-    let customer = req.body;
-    var password;
-    bcrypt.genSalt(16, function(err, salt) {
-        bcrypt.hash(customer.passwordHash, salt, null, function(err, hash) {
-            password = hash;
-        })
-    })
+    let firstName = req.body.firstName;
+    let lastName = req.body.lastName;
+    let email = req.body.email;
+    let phone = req.body.phone;
+    let city = req.body.city;
+    let state = req.body.state;
+    let password = req.body.password;
+    const hashedPassword = await bcrypt.hash(password, 16);
     try{
-        await customerData.create(customer.firstName, customer.lastName, customer.email, customer.phone, customer.city, customer.state, customer.passwordHash);
+        let customer = await customerData.create(firstName, lastName, email, phone, city, state, hashedPassword);
+        res.render('users/profile', {customer: customer});
     }catch(e){
         res.status(500).json({error: e});
     }
 });
 
-// router.get('/login', async(req, res) => {
-//     if(req.cookies.name === "AuthCookie"){
-//         res.redirect("/private");
-//     }else{
-//         res.render("users/login");
-//     }
-// })
+router.get('/login', async(req, res) => {
+    if(req.cookies.name === "AuthCookie"){
+        res.redirect("/private");
+    }else{
+        res.render("users/login", {Title: 'Customer Login'});
+    }
+});
 
 router.post("/login", async (req, res) =>{
     let email = req.body.email;
     let password = req.body.password;
-    if(username && password){
-        let userID = await users.getfromEmail(email);
+    if(email && password){
+        let userID = await customers.getfromEmail(email);
         if(userID != -1){
-            let user = await users.passwordCorrect(userID, password);
+            let user = await customers.passwordCorrect(userID, password);
             if(user == false){
-                res.render("users/login", {error: "Password is incorrect"});
+                res.render("users/login", {errors: ["Password is incorrect"]});
             }else{
                 res.cookie("name", "AuthCookie");
                 req.session.user = user;
                 res.redirect('/private');
             }
         }else{
-            res.render("users/login", {title: "Login Screen", error: "Invalid Login Information"});
+            res.render("users/login", {title: "Login Screen", errors: ["Invalid Login Information"]});
         }
     }else{
-        res.render("users/login", {title: "Login Screen", error: "Invalid Login Information"});
+        res.render("users/login", {title: "Login Screen", errors: ["Invalid Login Information"]});
     }
 });
 

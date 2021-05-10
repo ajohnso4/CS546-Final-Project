@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/register', async(req, res) => {
-    return  res.status(200).render("restaurants/register", {layout: false});
+    return  res.status(200).render("restaurants/register");
 });
 
 router.post('/register', async(req, res) => {
