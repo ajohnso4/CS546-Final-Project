@@ -8,11 +8,17 @@
          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        
-       
     </head>
 
     <body>
+        <section>
+        <nav class="topnav">
+            <a  href="/">Home</a>
+            <a href="/customer/login">Customers</a>
+            <a class="active" href="/restaurants/login">Restaurant</a>
+            <a href="/reviews">Reviews</a>
+        </nav>
+        </section>
         <main>
             <div class="jumbotron">
                 <div class="container">
@@ -60,6 +66,10 @@
                     </div>
                 </form>
                 </fieldset>
+
+                <div>
+                    <h3><a href="/restaurants/login">Already a member? Login then!</a></h3>
+                </div>
             </div>
            </main>
             {{#if hasError}}

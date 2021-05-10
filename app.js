@@ -16,25 +16,19 @@ app.use(
 );
 
 app.use( async(req, res, next) =>{
-    console.log("Current Timestamp: " +new Date().toUTCString());
-    console.log("Request Method: " + req.method);
-    console.log("Request Route: " + req.originalUrl);
-    
-    if(req.session.restaurant){
-        console.log("Authenticated User")
-    } else {
-        console.log("Non-Authenticated User")
-    }
-    console.log()
-    next();
+  let currentTimestamp = new Date().toUTCString();
+  let requestMethod = req.method;
+  let requestRoutes = req.originalUrl;
+  let Authenticated;
+  
+  if(req.session.restaurant){
+    Authenticated="Authenticated User"
+  } else {
+     Authenticated="Non-Authenticated User"
+  }
+  console.log(`[${currentTimestamp}]: ${requestMethod} ${requestRoutes} (${Authenticated})`)
+  next();
 });
-
-// app.use("/restaurants/register", (req, res, next) =>{
-//   if(req.session.restaurant){
-//     return res.redirect('/');
-//   } 
-//   next();
-// })
 
 app.use("/restaurants/login", (req, res, next) => {
   if (!req.session.restaurant) {
