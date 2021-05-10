@@ -29,9 +29,16 @@ app.use( async(req, res, next) =>{
     next();
 });
 
-app.use("/restaurants/register", (req, res, next) =>{
-  if(!req.session.restaurant){
-    res.status(403).render("restaurants/register", {layout: false})
+// app.use("/restaurants/register", (req, res, next) =>{
+//   if(req.session.restaurant){
+//     return res.redirect('/');
+//   } 
+//   next();
+// })
+
+app.use("/restaurants/login", (req, res, next) => {
+  if (!req.session.restaurant) {
+    return res.status(403).render("restaurants/login", {layout: false})
   } else {
     next();
   }
@@ -42,7 +49,7 @@ const exphbs = require("express-handlebars");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.engine("handlebars", exphbs({ defaultLayout: "main"}));
 app.set("view engine", "handlebars");
 
 configRoutes(app);

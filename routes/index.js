@@ -5,7 +5,7 @@ const path = require('path');
 const constructorMethod = (app) => {
     app.use('/customers', customers);
     app.use('/restaurants', restaurants);
-    app.get("/", (req, res) => {
+    app.get('/', (req, res) => {
         res.render(path.resolve("views/layouts/main"));
     })
     app.use('*', (req, res) => {

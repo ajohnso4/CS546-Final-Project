@@ -3,7 +3,7 @@ const { restaurants } = require('../config/mongoCollections');
 const router = express.Router();
 const restaurantData = require('../data/restaurants');
 const reviewsData = require('../data/reviews');
-const bcryptjs = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
 router.get('/', async (req, res) => {
     let restaurant = await restaurantData.getAll();
@@ -14,35 +14,28 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/:id', async (req, res) => {
-    let restaurant;
-    try{
-        restaurant = await restaurantData.get(req.params.id);
-    }catch(e){
-        res.status(500).json({error: e});
-    }
-    try{
-        res.json(restaurant);
-    }catch(e){
-        res.status(404).json({error: e});
-    }
+router.get('/register', async(req, res) => {
+    return  res.status(200).render("restaurants/register", {layout: false});
 });
 
-
-// router.get('/register', async(req, res) => {
-//     if(req.session.restaurant){
-//         res.redirect("/")
-//     } else{
-//     res.render("restaurants/register", {layout:false})
-//     }
-// })
-
+router.post('/register', async(req, res) => {
+    let restaurant = req.body;
+    const password = await bcrypt.hash(restaurant.passwordHash, 16);
+    try{
+        await restaurantData.create(restaurant.name, restaurant.address, restaurant.email, restaurant.phone,
+                                        restaurant.description, password);
+        res.redirect('/restaurants/login');
+    }catch(e){
+        res.status(500).render("restaurants/register", {layout: false, hasError: true, errors: [e]});
+    }
+});
 
 router.post('/login', async(req, res) => {
     let restaurantName = req.body.restaurantName;
     let password = req.body.password;
 
-    let restaurant = restaurantData.getId(restaurantName);
+    let restaurantId = restaurantData.getId(restaurantName);
+    let restaurant = restaurantData.get(restaurantId);
 
     if(restaurant){
 
@@ -63,22 +56,6 @@ router.post('/login', async(req, res) => {
         return;
     }
     
-})
-
-router.post('/register', async (req, res) => {
-    let restaurant = req.body;
-    var password;
-    bcryptjs.genSalt(16, function(err, salt) {
-        bcryptjs.hash(restaurant.passwordHash, salt, null, function(err, hash) {
-            password = hash;
-        })
-    })
-    try{
-        await restaurantData.create(restaurant.name, restaurant.address, restaurant.email, restaurant.phone,
-                                        restaurant.description, password);
-    }catch(e){
-        res.status(500).json({error: e});
-    }
 });
 
 router.delete('/:id', async (req, res) => {
