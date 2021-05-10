@@ -7,15 +7,15 @@ const bcrypt = require('bcrypt');
 
 router.get('/', async (req, res) => {
     let restaurant = await restaurantData.getAll();
-    try{
+    try {
         res.json(restaurant);
-    }catch(e){
+    } catch(e) {
         res.status(404).json({error: e});
     }
 });
 
 router.get('/register', async(req, res) => {
-    return  res.status(200).render("restaurants/register", {layout: false});
+    return res.status(200).render("restaurants/register", {layout: false});
 });
 
 router.post('/register', async(req, res) => {
@@ -33,15 +33,20 @@ router.post('/register', async(req, res) => {
 router.post('/login', async(req, res) => {
     let restaurantName = req.body.restaurantName;
     let password = req.body.password;
-
-    let restaurantId = restaurantData.getId(restaurantName);
-    let restaurant = restaurantData.get(restaurantId);
-
+    let restaurant;
+    try {
+        let restaurantId = await restaurantData.getId(restaurantName);
+        restaurant = await restaurantData.get(restaurantId);
+    } catch (e) {
+        res.status(401).render("restaurants/login",{layout: false, errors:[e], hasError: true});
+    }
+    
     if(restaurant){
 
-        let validPwd = await bcryptjs.compareSync(password, restaurant.passwordHash);
+        let validPwd = await bcrypt.compareSync(password, restaurant.passwordHash);
+        console.log(validPwd);
         if(!validPwd){
-            res.status(401).render("restaurants/login",{layouts: false, errors:["Invalid password"], hasError: this.true});
+            res.status(401).render("restaurants/login",{layout: false, errors:["Invalid password"], hasError: true});
             return;
         }
        
