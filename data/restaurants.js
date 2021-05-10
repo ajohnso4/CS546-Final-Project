@@ -62,7 +62,7 @@ const get = async function get(id) {
 const getId = async function getId(name) {
     const restaurantsCollection = await restaurants();
     var restaurant =  await restaurantsCollection.findOne({ name: name});
-    restaurant = restaurant._id;
+    restaurant = restaurant._id.toString();
     return restaurant
 }
 const getAll = async function getAll() {
