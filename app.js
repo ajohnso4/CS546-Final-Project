@@ -31,18 +31,12 @@ app.use( async(req, res, next) =>{
 });
 
 app.use("/restaurants/login", (req, res, next) => {
-<<<<<<< HEAD
   if (!req.session.restaurant && req.method === "GET") {
-    return res.status(200).render("restaurants/login", {layout: false})
-=======
-  if (!req.session.restaurant) {
     return res.status(200).render("restaurants/login");
->>>>>>> c3fb899cb1c4fd8f832e02c8dab101b946f40799
   } else {
     next();
   }
 });
-
 
 const exphbs = require("express-handlebars");
 

@@ -15,11 +15,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/register', async(req, res) => {
-<<<<<<< HEAD
-    return res.status(200).render("restaurants/register", {layout: false});
-=======
     return  res.status(200).render("restaurants/register");
->>>>>>> c3fb899cb1c4fd8f832e02c8dab101b946f40799
 });
 
 router.post('/register', async(req, res) => {
@@ -42,15 +38,14 @@ router.post('/login', async(req, res) => {
         let restaurantId = await restaurantData.getId(restaurantName);
         restaurant = await restaurantData.get(restaurantId);
     } catch (e) {
-        res.status(401).render("restaurants/login",{layout: false, errors:[e], hasError: true});
+        res.status(401).render("restaurants/login",{errors:[e], hasError: true});
     }
     
     if(restaurant){
 
         let validPwd = await bcrypt.compareSync(password, restaurant.passwordHash);
-        console.log(validPwd);
         if(!validPwd){
-            res.status(401).render("restaurants/login",{layout: false, errors:["Invalid password"], hasError: true});
+            res.status(401).render("restaurants/login",{errors:["Invalid password"], hasError: true});
             return;
         }
        
