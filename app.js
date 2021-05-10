@@ -17,22 +17,23 @@ app.use(
 );
 
 app.use( async(req, res, next) =>{
-    console.log("Current Timestamp: " +new Date().toUTCString());
-    console.log("Request Method: " + req.method);
-    console.log("Request Route: " + req.originalUrl);
-    
-    if(req.session.restaurant){
-        console.log("Authenticated User")
-    } else {
-        console.log("Non-Authenticated User")
-    }
-    console.log()
-    next();
+  let currentTimestamp = new Date().toUTCString();
+  let requestMethod = req.method;
+  let requestRoutes = req.originalUrl;
+  let Authenticated;
+  
+  if(req.session.restaurant){
+    Authenticated="Authenticated User"
+  } else {
+     Authenticated="Non-Authenticated User"
+  }
+  console.log(`[${currentTimestamp}]: ${requestMethod} ${requestRoutes} (${Authenticated})`)
+  next();
 });
 
-app.use("/restaurants/register", (req, res, next) =>{
-  if(!req.session.restaurant){
-    res.status(403).render("restaurants/register", {layout: false})
+app.use("/restaurants/login", (req, res, next) => {
+  if (!req.session.restaurant) {
+    return res.status(403).render("restaurants/login", {layout: false})
   } else {
     next();
   }
@@ -43,7 +44,7 @@ const exphbs = require("express-handlebars");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.engine("handlebars", exphbs({ defaultLayout: "main"}));
 app.set("view engine", "handlebars");
 app.use(express.json());
 app.use(cookieParser());

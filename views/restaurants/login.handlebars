@@ -4,13 +4,21 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Login</title>
-         <link rel="stylesheet" href="/public/site.css" />
+         <link rel="stylesheet" href="/public/css/site.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
        
     </head>
 
     <body>
+        <section>
+        <nav class="topnav">
+            <a href="/">Home</a>
+            <a href="/customer/login">Customers</a>
+            <a class="active"  href="/restaurants/login">Restaurant</a>
+            <a href="/reviews">Reviews</a>
+        </nav>
+        </section>
         <main>
             <div class="jumbotron">
                 <div class="container">
@@ -21,7 +29,7 @@
             <div class="container">
                 <fieldset>
                 <legend>Enter User login Information Here</legend>
-                <form id="login-form" action="/login" method="post">
+                <form id="login-form" action="restaurants/login" method="post">
                     <div class="form-group">
                         <label for="username">Restaurant Name</label>
                         <input type="text" class="form-control" name="restaurantName" placeholder="Enter the Restaurant Name here" required>
@@ -35,7 +43,14 @@
                     <button type="submit"  class="btn btn-primary">Log In</button>
                 </form>
                 </fieldset>
+                <div>
+                <div>
+                    <h3><a href="/restaurants/register">Not a member? Sign Up!</a></h3>
+                </div>
+                </div>
             </div>
+
+            
            </main>
            {{#if hasError}}
                 {{#each errors}}
