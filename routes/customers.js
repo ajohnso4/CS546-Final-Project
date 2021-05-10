@@ -3,15 +3,70 @@ const { customers } = require('../config/mongoCollections');
 const router = express.Router();
 const customerData = require('../data/customers');
 const reviewsData = require('../data/reviews');
-const bcryptjs = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
 router.get('/', async (req, res) => {
     let customers = await customerData.getAll();
+    return customers;
+});
+
+router.post('/private'), async (req, res) => {
+    user = req.session.user;
+    res.render("users/login");
+}
+
+router.post('/register', async (req, res) => {
+    let customer = req.body;
+    var password;
+    bcrypt.genSalt(16, function(err, salt) {
+        bcrypt.hash(customer.passwordHash, salt, null, function(err, hash) {
+            password = hash;
+        })
+    })
     try{
-        res.json(customers);
+        await customerData.create(customer.firstName, customer.lastName, customer.email, customer.phone, customer.city, customer.state, customer.passwordHash);
     }catch(e){
-        res.status(404).json({error: e});
+        res.status(500).json({error: e});
     }
+});
+
+// router.get('/login', async(req, res) => {
+//     if(req.cookies.name === "AuthCookie"){
+//         res.redirect("/private");
+//     }else{
+//         res.render("users/login");
+//     }
+// })
+
+router.post("/login", async (req, res) =>{
+    let email = req.body.email;
+    let password = req.body.password;
+    if(username && password){
+        let userID = await users.getfromEmail(email);
+        if(userID != -1){
+            let user = await users.passwordCorrect(userID, password);
+            if(user == false){
+                res.render("users/login", {error: "Password is incorrect"});
+            }else{
+                res.cookie("name", "AuthCookie");
+                req.session.user = user;
+                res.redirect('/private');
+            }
+        }else{
+            res.render("users/login", {title: "Login Screen", error: "Invalid Login Information"});
+        }
+    }else{
+        res.render("users/login", {title: "Login Screen", error: "Invalid Login Information"});
+    }
+});
+
+router.get('/register', async (req, res) => {
+    res.render('users/signup');
+});
+
+router.get("/logout", (req, res) => {
+    res.clearCookie('name');
+    res.redirect('/');
 });
 
 router.get('/:id', async (req, res) => {
@@ -25,22 +80,6 @@ router.get('/:id', async (req, res) => {
         res.json(customer);
     }catch(e){
         res.status(404).json({error: e});
-    }
-});
-
-router.post('/', async (req, res) => {
-    let customer = req.body;
-    var password;
-    bcryptjs.genSalt(16, function(err, salt) {
-        bcryptjs.hash(customer.passwordHash, salt, null, function(err, hash) {
-            password = hash;
-        })
-    })
-    try{
-        await customerData.create(customer.firstName, customer.lastName, customer.email, customer.phone, customer.city, customer.state, password);
-        
-    }catch(e){
-        res.status(500).json({error: e});
     }
 });
 

@@ -60,7 +60,7 @@ const get = async function get(id) {
     return customer;
 }
 const getId = async function getId(name) {
-    const customersCollection = await restaurants();
+    const customersCollection = await customers();
     var customer =  await customersCollection.findOne({ name: name});
     customer = customer._id;
     return customer
@@ -72,6 +72,18 @@ const getAll = async function getAll() {
         item._id = item._id.toString();
     }
     return customersList;
+}
+
+const getfromEmail = async function getUsername(email) {
+    if(!email) throw 'Username must be provided!';
+    if(typeof email != 'string' || email.trim() == '') throw 'Username must be a valid String!';
+    let customersList = await customersCollection.find({}).toArray();
+    for(customer of customersList){
+        if(email == customer.email){
+            return customer._id.toString();
+        }
+    } 
+    return -1;
 }
 
 const update = async function update(id, updatedCustomer) {
@@ -164,5 +176,6 @@ module.exports = {
     getId,
     getAll,
     update,
-    remove
+    remove,
+    getfromEmail
 }
