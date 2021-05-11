@@ -6,7 +6,7 @@ const reviews = require('./reviews');
 const constructorMethod = (app) => {
     app.use('/customers', customers);
     app.use('/restaurants', restaurants);
-    app.use('/reviews', reviews);
+    app.use('/reservations', reservations);
     app.get('/', (req, res) => {
         res.render('home/home', {Title: 'Restaurant Table Reservation Page'});
     });
