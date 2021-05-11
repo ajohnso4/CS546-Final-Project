@@ -5,6 +5,7 @@ const router = express.Router();
 const customerData = require('../data/customers');
 const restaurantData = require('../data/restaurants');
 const reviewsData = require('../data/reviews');
+const reservationsData = require('../data/reservations');
 const bcrypt = require('bcrypt');
 
 //Get all the reviews for a particular restaurant
@@ -34,7 +35,7 @@ router.get('/customer/:id', async(req, res) => {
 router.post('/customer/:id', async(req, res) => {
     let reservationDate = req.body.reservationDate;
     let reservationTime = req.body.reservationTime;
-    let restaurant = req.body.t;
+    let restaurantno_of_guests = req.body.no_of_guests;
     if(review.trim() == ''){
         //render the error message on the page
         console.log('Review Cannot be blank!');
@@ -43,8 +44,8 @@ router.post('/customer/:id', async(req, res) => {
         console.log('Rating cannot be blank!');
     }else{
         try{
-            let createdReview = await reviewsData.create(restaurant._id, req.params.id, review, rating);
-            res.json(createdReview);
+            let createdReservation = await reservationsData.create(restaurant._id, req.params.id, reservationDate, reservationTime,restaurantno_of_guests);
+            res.json(createdReservation);
         }catch(e){
             res.status(500).json({error: e});
         }
