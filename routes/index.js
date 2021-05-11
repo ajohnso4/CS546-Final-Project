@@ -2,6 +2,7 @@ const customers = require('./customers');
 const restaurants = require('./restaurants')
 const path = require('path');
 const reviews = require('./reviews');
+const reservations = require('./reservation')
 
 const constructorMethod = (app) => {
     app.use('/customers', customers);
