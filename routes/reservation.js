@@ -36,12 +36,15 @@ router.post('/customer/:id', async(req, res) => {
     let reservationDate = req.body.reservationDate;
     let reservationTime = req.body.reservationTime;
     let restaurantno_of_guests = req.body.no_of_guests;
-    if(review.trim() == ''){
-        //render the error message on the page
-        console.log('Review Cannot be blank!');
-    }else if(!rating){
-        //render error message that rating is missing
-        console.log('Rating cannot be blank!');
+    if(reservationDate.trim() == ''){
+        //render the error that reservationDate is missing
+        console.log('Reservation Date  cannot be blank!');
+    }else if(!reservationTime){
+        //render error message that reservationTime is missing
+        console.log(' Reservation Time cannot be blank!');}
+    else if(!restaurantno_of_guests){
+            //render error message that no_of_guests is missing
+            console.log('no_of_guests cannot be blank!');
     }else{
         try{
             let createdReservation = await reservationsData.create(restaurant._id, req.params.id, reservationDate, reservationTime,restaurantno_of_guests);
