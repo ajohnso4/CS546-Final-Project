@@ -14,8 +14,8 @@ const bcrypt = require('bcrypt');
 router.get('/restuarant/:id', async(req, res) =>{
     try {
         let restaurant = await restaurantData.getId(req.params.id);
-        let reservations = restaurant.reservations;
-        res.json(reservations);
+        let reviews = restaurant.reviews;
+        res.json(reviews);
     }catch(e){
         res.status(500).json({error: e});
     }
@@ -24,17 +24,17 @@ router.get('/restuarant/:id', async(req, res) =>{
 router.get('/customer/:id', async(req, res) => {
     try{
         let customer = await customerData.getId(req.params.id);
-        let reservations = customer.reservations;
-        res.json(reservations);
+        let reviews = customer.reviews;
+        res.json(reviews);
     }catch(e){
         res.status(500).json({error: e});
     }
 });
 
 router.post('/customer/:id', async(req, res) => {
-    let reservationDate = req.body.reservationDate;
-    let reservationTime = req.body.reservationTime;
-    let restaurant = req.body.t;
+    let review = req.body.review;
+    let rating = req.body.rating;
+    let restaurant = req.body.restaurant;
     if(review.trim() == ''){
         //render the error message on the page
         console.log('Review Cannot be blank!');
