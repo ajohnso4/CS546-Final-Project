@@ -3,7 +3,7 @@ const { restaurants } = require('../config/mongoCollections');
 const router = express.Router();
 const restaurantData = require('../data/restaurants');
 const reviewsData = require('../data/reviews');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 router.get('/', async (req, res) => {
     let restaurant = await restaurantData.getAll();

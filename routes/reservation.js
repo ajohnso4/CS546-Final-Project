@@ -6,7 +6,7 @@ const customerData = require('../data/customers');
 const restaurantData = require('../data/restaurants');
 const reviewsData = require('../data/reviews');
 const reservationsData = require('../data/reservations');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 //Get all the reviews for a particular restaurant
 //Get all reviews for a person

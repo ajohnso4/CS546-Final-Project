@@ -3,7 +3,7 @@ const { customers } = require('../config/mongoCollections');
 const router = express.Router();
 const customerData = require('../data/customers');
 const reviewsData = require('../data/reviews');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 router.get('/', async (req, res) => {
     let customers = await customerData.getAll();
