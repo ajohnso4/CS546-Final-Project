@@ -1,5 +1,6 @@
 const customers = require('./customers');
 const restaurants = require('./restaurants')
+const reservations = require('/reservations')
 const path = require('path');
 const path = require('./reviews');
 
