@@ -7,14 +7,13 @@ const session = require("express-session");
 const static = express.static(__dirname + "/public");
 app.use("/public", static);
 
-app.use(
-  session({
-    name: "AuthCookie",
-    secret: "Secret Session",
-    saveUninitialized: true,
-    resave: false,
-  })
-);
+app.use(cookieParser());
+app.use(session({
+  name: 'AuthCookie',
+  secret: 'some secret string!',
+  resave: false,
+  saveUninitialized: true,
+}));
 
 app.use( async(req, res, next) =>{
   let currentTimestamp = new Date().toUTCString();
@@ -32,13 +31,12 @@ app.use( async(req, res, next) =>{
 });
 
 app.use("/restaurants/login", (req, res, next) => {
-  if (!req.session.restaurant) {
+  if (!req.session.restaurant && req.method === "GET") {
     return res.status(200).render("restaurants/login");
   } else {
     next();
   }
 });
-
 
 const exphbs = require("express-handlebars");
 
@@ -48,13 +46,7 @@ app.use(express.urlencoded({ extended: true }));
 app.engine("handlebars", exphbs({ defaultLayout: "main"}));
 app.set("view engine", "handlebars");
 app.use(express.json());
-app.use(cookieParser());
-app.use(session({
-  name: 'AuthCookie',
-  secret: 'some secret string!',
-  resave: false,
-  saveUninitialized: true,
-}));
+
 configRoutes(app);
 
 app.listen(3000, () => {
