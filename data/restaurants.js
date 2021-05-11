@@ -15,7 +15,8 @@ const create = async function create(name, address, email, phone, description, p
         phone.replace(/\s/g, "") === "" || description.replace(/\s/g, "") === "" || passwordHash.replace(/\s/g, "") === "") {
         throw "Parameters cannot be empty strings.";
     }
-    let regex = /^\d{3}-\d{3}-\d{4}$/;
+    // Can not write dashes in the form for now
+    let regex = /^\d{3}\d{3}\d{4}$/;
     if (!regex.test(phone)) {
         throw "Phone number is in wrong format.";
     }
@@ -61,8 +62,8 @@ const get = async function get(id) {
 const getId = async function getId(name) {
     const restaurantsCollection = await restaurants();
     var restaurant =  await restaurantsCollection.findOne({ name: name});
-    restaurant = restaurant._id;
-    return restaurant
+    restaurant = restaurant._id.toString();
+    return restaurant;
 }
 const getAll = async function getAll() {
     const restaurantsCollection = await restaurants();
