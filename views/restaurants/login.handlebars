@@ -1,50 +1,69 @@
-<section>
-<nav class="topnav">
-    <a href="/">Home</a>
-    <a href="/customers/login">Customers</a>
-    <a class="active"  href="/restaurants/login">Restaurant</a>
-    <a href="/reviews">Reviews</a>
-</nav>
-</section>
-<main>
-    <div class="jumbotron">
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/public/css/site.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <section>
+        <nav class="topnav">
+            <a href="/">Home</a>
+            <a href="/customers/login">Customers</a>
+            <a class="active" href="/restaurants/login">Restaurant</a>
+            <a href="/reviews">Reviews</a>
+        </nav>
+    </section>
+    <main>
+        <div class="jumbotron">
+            <div class="container">
+                <h1>Login Page</h1>
+            </div>
+        </div>
+
         <div class="container">
-            <h1>Login Page</h1>
-        </div>
-    </div>
+            <fieldset>
+                <legend>Enter User login Information Here</legend>
+                <form id="login-form" action="login" method="post">
+                    <div class="form-group">
+                        <label for="username">Restaurant Name</label>
+                        <input type="text" class="form-control" name="restaurantName"
+                            placeholder="Enter the Restaurant Name here" required>
+                    </div>
 
-    <div class="container">
-        <fieldset>
-        <legend>Enter User login Information Here</legend>
-        <form id="login-form" action="login" method="post">
-            <div class="form-group">
-                <label for="username">Restaurant Name</label>
-                <input type="text" class="form-control" name="restaurantName" placeholder="Enter the Restaurant Name here" required>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" name="password"
+                            placeholder="Enter the password here" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Log In</button>
+                </form>
+            </fieldset>
+            <div>
+                <div>
+                    <h3><a href="/restaurants/register">Not a member? Sign Up!</a></h3>
+                </div>
             </div>
-
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" name="password" placeholder="Enter the password here" required>
-            </div>
-
-            <button type="submit"  class="btn btn-primary">Log In</button>
-        </form>
-        </fieldset>
-        <div>
-        <div>
-            <h3><a href="/restaurants/register">Not a member? Sign Up!</a></h3>
         </div>
-        </div>
-    </div>
 
-    
-</main>
-{{#if hasError}}
+
+    </main>
+    {{#if hasError}}
     {{#each errors}}
-        <ul>
+    <ul>
         <li class="error">
             {{this}}
         </li>
-        </ul>
-        {{/each}}
-{{/if}}
+    </ul>
+    {{/each}}
+    {{/if}}
+</body>
+
+</html>
