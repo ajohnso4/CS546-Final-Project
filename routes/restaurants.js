@@ -50,7 +50,7 @@ router.post('/login', async(req, res) => {
         }
        
         req.session.restaurant = restaurantName;
-        res.redirect("/private");
+        res.render("restaurants/private",{restaurant:restaurant});
     }
 
     if(!req.session.restaurant){
@@ -62,6 +62,10 @@ router.post('/login', async(req, res) => {
     
 });
 
+router.get('/logout', async(req, res) => {
+    req.session.destroy();
+    res.render('restaurants/logout')
+})
 router.delete('/:id', async (req, res) => {
     try{
         let restaurant = await restaurantData.remove(req.params.id);
