@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/public/css/site.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <section>
+        <nav class="topnav">
+            <a href="/">Home</a>
+            <a href="/customers/login">Customers</a>
+            <a class="active" href="/restaurants/login">Restaurant</a>
+            <a href="/reviews">Reviews</a>
+        </nav>
+    </section>
+    <main>
+            <div class="container">
+                <h1>Table Reservation</h1>
+            </div>
+        <div class="container">
+                <legend>Fill the form</legend>
+                <form id="login-form" action="/customer/{{customer._id}}" method="post">
+                    <div class="form-group">
+                        <label for="restaurantName">Restaurant Name</label>
+                        <input type="text" class="form-control" name="restaurantName" id="restaurantName"
+                            placeholder="Enter the Restaurant Name here" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reservationDate">Enter the Date</label>
+                        <input type="number" class="form-control" name="reservationDate" id="reservationDate"
+                            placeholder="Enter the date here" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reservationTime">Enter the Time</label>
+                        <input type="number" class="form-control" name="reservationTime" id="reservationTime"
+                            placeholder="Enter the time here" required>
+                    </div>
+                   <div class="form-group">
+                        <label for="no_of_guests">Number of people</label>
+                        <input type="number" class="form-control" name="no_of_guests" id="no_of_guests"
+                            placeholder="Enter Number of people" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">RESERVE A TABLE</button>
+                </form>
+        </div>
+    </main>
+    {{#if hasError}}
+    {{#each errors}}
+    <ul>
+        <li class="error">
+            {{this}}
+        </li>
+    </ul>
+    {{/each}}
+    {{/if}}
+</body>
+</html>

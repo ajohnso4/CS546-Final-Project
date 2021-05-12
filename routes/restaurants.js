@@ -3,7 +3,7 @@ const { restaurants } = require('../config/mongoCollections');
 const router = express.Router();
 const restaurantData = require('../data/restaurants');
 const reviewsData = require('../data/reviews');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 router.get('/', async (req, res) => {
     let restaurant = await restaurantData.getAll();
@@ -18,13 +18,20 @@ router.get('/register', async(req, res) => {
     return  res.status(200).render("restaurants/register");
 });
 
+router.get('/private', async(req, res) => {
+    let restaurant = req.session.restaurant;
+    res.render('restaurants/private', {restaurant: restaurant})
+})
+
 router.post('/register', async(req, res) => {
     let restaurant = req.body;
     const password = await bcrypt.hash(restaurant.passwordHash, 16);
+    let restaurantDetails
     try{
-        await restaurantData.create(restaurant.name, restaurant.address, restaurant.email, restaurant.phone,
+        restaurantDetails = await restaurantData.create(restaurant.name, restaurant.address, restaurant.email, restaurant.phone,
                                         restaurant.description, password);
-        res.redirect('/restaurants/login');
+        req.session.restaurant = restaurantDetails;
+        res.redirect('/restaurants/private');
     }catch(e){
         res.status(500).render("restaurants/register", {layout: false, hasError: true, errors: [e]});
     }
@@ -49,8 +56,8 @@ router.post('/login', async(req, res) => {
             return;
         }
        
-        req.session.restaurant = restaurantName;
-        res.redirect("/private");
+        req.session.restaurant = restaurant;
+        res.redirect("/restaurants/private");
     }
 
     if(!req.session.restaurant){
@@ -61,6 +68,11 @@ router.post('/login', async(req, res) => {
     }
     
 });
+
+router.get('/logout', async(req, res) => {
+    req.session.destroy();
+    res.render('restaurants/logout')
+})
 
 router.delete('/:id', async (req, res) => {
     try{

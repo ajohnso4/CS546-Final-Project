@@ -21,10 +21,10 @@ app.use( async(req, res, next) =>{
   let requestRoutes = req.originalUrl;
   let Authenticated;
   
-  if(req.session.restaurant){
+  if(req.session.restaurant || req.session.customer){
     Authenticated="Authenticated User"
   } else {
-     Authenticated="Non-Authenticated User"
+    Authenticated="Non-Authenticated User"
   }
   console.log(`[${currentTimestamp}]: ${requestMethod} ${requestRoutes} (${Authenticated})`)
   next();
@@ -33,6 +33,14 @@ app.use( async(req, res, next) =>{
 app.use("/restaurants/login", (req, res, next) => {
   if (!req.session.restaurant && req.method === "GET") {
     return res.status(200).render("restaurants/login");
+  } else {
+    next();
+  }
+});
+
+app.use("/customers/register", (req, res, next) => {
+  if (!req.session.user && req.method === "GET") {
+    return res.status(200).render("users/signup");
   } else {
     next();
   }
