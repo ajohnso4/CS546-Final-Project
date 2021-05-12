@@ -74,7 +74,8 @@ const getAll = async function getAll() {
     return customersList;
 }
 
-const getfromEmail = async function getUsername(email) {
+const getfromEmail = async function getfromEmail(email) {
+    const customersCollection = await customers();
     if(!email) throw 'Username must be provided!';
     if(typeof email != 'string' || email.trim() == '') throw 'Username must be a valid String!';
     let customersList = await customersCollection.find({}).toArray();

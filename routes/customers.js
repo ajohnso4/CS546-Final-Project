@@ -10,10 +10,10 @@ router.get('/', async (req, res) => {
     res.json(customers);
 });
 
-router.post('/private'), async (req, res) => {
-    user = req.session.user;
-    res.render("users/profile", {customer: user});
-}
+router.get('/private', async (req, res) => {
+    customer = req.session.customer;
+    res.render("users/profile", {customer: customer});
+})
 
 router.post('/register', async (req, res) => {
     let firstName = req.body.firstName;
@@ -26,33 +26,31 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 16);
     try{
         let customer = await customerData.create(firstName, lastName, email, phone, city, state, hashedPassword);
-        res.render('users/profile', {customer: customer});
+        req.session.customer = customer
+        res.redirect('/customers/private');
     }catch(e){
         res.status(500).json({error: e});
     }
 });
 
 router.get('/login', async(req, res) => {
-    if(req.cookies.name === "AuthCookie"){
-        res.redirect("/private");
-    }else{
-        res.render("users/login", {Title: 'Customer Login'});
-    }
+    res.render("users/login", {Title: 'Customer Login'});
 });
 
 router.post("/login", async (req, res) =>{
     let email = req.body.email;
     let password = req.body.password;
     if(email && password){
-        let userID = await customers.getfromEmail(email);
-        if(userID != -1){
-            let user = await customers.passwordCorrect(userID, password);
-            if(user == false){
+        let userID = await customerData.getfromEmail(email);
+        let customer = await customerData.get(userID)
+        if(customer!= -1){
+            let validPwd = await bcrypt.compareSync(password, customer.passwordHash);
+            if(!validPwd){
                 res.render("users/login", {errors: ["Password is incorrect"]});
             }else{
                 res.cookie("name", "AuthCookie");
-                req.session.user = user;
-                res.redirect('/private');
+                req.session.customer = customer;
+                res.redirect('/customers/private');
             }
         }else{
             res.render("users/login", {title: "Login Screen", errors: ["Invalid Login Information"]});

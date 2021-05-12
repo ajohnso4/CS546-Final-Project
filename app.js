@@ -38,6 +38,14 @@ app.use("/restaurants/login", (req, res, next) => {
   }
 });
 
+app.use("/customers/register", (req, res, next) => {
+  if (!req.session.user && req.method === "GET") {
+    return res.status(200).render("users/signup");
+  } else {
+    next();
+  }
+});
+
 const exphbs = require("express-handlebars");
 
 app.use(express.json());
