@@ -11,6 +11,14 @@ const bcrypt = require('bcryptjs');
 //Get all the reviews for a particular restaurant
 //Get all reviews for a person
 //Post review to restaurant from person
+router.get('/', async(req, res) => {
+    try{
+        let restaurants = await restaurantData.getAll();
+        res.render('reservation/openRestaurants', {restaurants: restaurants});
+    }catch(e){
+        res.status(500).json({error: e});
+    }
+})
 
 router.get('/restuarant/:id', async(req, res) =>{
     try {
