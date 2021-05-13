@@ -9,7 +9,19 @@ const reviewsData = require('../data/reviews');
 router.get('/restaurant/:id', async(req, res) =>{
     try {
         let restaurant = await restaurantData.get(req.params.id);
-        res.render('review/restaurantReview', {restaurant: restaurant})
+        let customer = req.session.customer;
+        if (customer) {
+            reviewed = await reviewsData.hasReviewed(req.params.id, customer.reviews);
+            console.log(reviewed);
+            if (reviewed) {
+                res.render('review/restaurantReview', {restaurant: restaurant, isCustomer: false});
+            } else {
+                res.render('review/restaurantReview', {restaurant: restaurant, isCustomer: true, customer: req.session.customer});
+            }
+        } else {
+            res.render('review/restaurantReview', {restaurant: restaurant, isCustomer: false});
+        }
+        
     }catch(e){
         res.status(500).json({error: e.toString()});
     }
@@ -28,7 +40,13 @@ router.get('/customer/:id', async(req, res) => {
 router.post('/customer/:id', async(req, res) => {
     let review = req.body.review;
     let rating = req.body.rating;
-    let restaurant = req.body.restaurant;
+    let customer = req.session.customer;
+    let restaurant;
+    try {
+        restaurant = await restaurantData.get(req.params.id);
+    } catch (e) {
+        res.status(500).json({error: e.toString()});
+    }
     if(review.trim() == ''){
         //render the error message on the page
         console.log('Review Cannot be blank!');
@@ -37,10 +55,10 @@ router.post('/customer/:id', async(req, res) => {
         console.log('Rating cannot be blank!');
     }else{
         try{
-            let createdReview = await reviewsData.create(restaurant._id, req.params.id, review, rating);
-            res.json(createdReview);
+            let createdReview = await reviewsData.create(restaurant._id.toString(), customer._id.toString(), review, Number.parseInt(rating));
+            res.redirect('/reviews/restaurant/' + req.params.id);
         }catch(e){
-            res.status(500).json({error: e});
+            res.status(500).json({error: e.toString()});
         }
     }
 });

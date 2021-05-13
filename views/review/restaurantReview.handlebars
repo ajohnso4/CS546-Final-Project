@@ -17,8 +17,26 @@
         <a href="/reviews/restaurant/{{restaurant._id}}">Reviews</a>
     </nav>
 </section>
-
-
+{{#if isCustomer}}
+    <form method="POST" action="/reviews/customer/{{restaurant._id}}" id="review-form" novalidate>
+            <div class="container">
+                <div class="col form-group">
+                    <label for="rating">Rating</label>
+                    <input type="number" class="form-control" id="rating" name="rating" placeholder="Give rating">
+                </div>
+                <div class="col form-group">
+                    <label for="review">Write review</label>
+                    <input type="text" class="form-control" id="review" name="review" placeholder="write review">
+                </div>
+                <div id="review">
+                    <button type="submit" class="btn" name="submitButton" id="submitButton">Write Review</button>
+                </div>
+            </div>
+            {{#each errors}}
+                <div class = "error">{{this}}</div>
+            {{/each}}
+    </form>
+{{/if}}
 <h1>Reviews for {{restaurant.name}}</h1>
 <div class ="content">
     <section>
