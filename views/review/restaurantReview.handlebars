@@ -1,0 +1,36 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/public/css/site.css" />
+</head>
+
+<body>
+<section>
+    <nav class="topnav">
+        <a  href="/">Home</a>
+        <a  class="active" href="/restaurants/private">Profile</a>
+        <a href="/restaurants/reservation">No. of Reservation</a>
+        <a href="/reviews/restaurant/{{restaurant._id}}">Reviews</a>
+    </nav>
+</section>
+
+
+<h1>Reviews for {{restaurant.name}}</h1>
+<div class ="content">
+    <section>
+        {{#each restaurant.reviews}}
+        <div class="card">
+            <div class="container">
+                <h3>{{this.fullName}}</h3><br>
+                <h4>{{this.rating}}</h4>
+                <h4>{{this.review}}</h4>
+            </div>
+        </div>
+        {{/each}}
+    </section>
+
+</div>

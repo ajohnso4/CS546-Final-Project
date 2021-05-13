@@ -87,11 +87,10 @@ router.post('/login', async(req, res) => {
 
 router.get('/reservation', async(req, res) => {
     if (!req.session.restaurant) {
-        return res.redirect('/')
+        return res.redirect('/');
     }
-    let restaurant = req.session.restaurant
-    console.log(restaurant.reservations[0].firstName)
-    return res.render('reservation/restaurantReservation', {reservations: restaurant.reservations})
+    let restaurant = req.session.restaurant;
+    return res.render('reservation/restaurantReservation', {reservations: restaurant.reservations, reviewLink: restaurant._id});
 })
 
 router.get('/logout', async(req, res) => {

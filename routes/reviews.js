@@ -6,13 +6,12 @@ const customerData = require('../data/customers');
 const restaurantData = require('../data/restaurants');
 const reviewsData = require('../data/reviews');
 
-router.get('/restuarant/:id', async(req, res) =>{
+router.get('/restaurant/:id', async(req, res) =>{
     try {
-        let restaurant = await restaurantData.getId(req.params.id);
-        let reviews = restaurant.reviews;
-        res.json(reviews);
+        let restaurant = await restaurantData.get(req.params.id);
+        res.render('review/restaurantReview', {restaurant: restaurant})
     }catch(e){
-        res.status(500).json({error: e});
+        res.status(500).json({error: e.toString()});
     }
 });
 

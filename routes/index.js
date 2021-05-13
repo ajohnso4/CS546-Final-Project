@@ -8,6 +8,7 @@ const constructorMethod = (app) => {
     app.use('/customers', customers);
     app.use('/restaurants', restaurants);
     app.use('/reservations', reservations);
+    app.use('/reviews', reviews);
     app.get('/', (req, res) => {
         if (req.session.restaurant) {
             res.redirect("restaurants/private");
