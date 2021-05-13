@@ -5,20 +5,20 @@ const restaurantsData = require("./restaurants");
 
 function isValidDate(date)
 {
-    let matches = /^(\d{1,2})[/](\d{1,2})[/](\d{4})$/.exec(date);
+    let matches = /^(\d{4})[-](\d{1,2})[-](\d{1,2})$/.exec(date);
     if (matches == null) {
         return false;
     }
     return true;
 }
 // create a reservation from customerId and restaurantId
-const create = async function create(restaurantId, customerId, reservationDate, reservationTime, no_of_guests, table) {
+const create = async function create(restaurantId, customerId, reservationDate, reservationTime, no_of_guests) {
     if (restaurantId === undefined || customerId === undefined || reservationDate === undefined || reservationTime === undefined ||
-        no_of_guests === undefined || table === undefined) {
+        no_of_guests === undefined) {
             throw "All parameters must be provided";
         }
     if (typeof restaurantId !== 'string' || typeof customerId !== 'string' || typeof no_of_guests !== 'number' ||
-        typeof table !== 'number' || typeof reservationDate !== 'string' || typeof reservationTime !== 'string') {
+        typeof reservationDate !== 'string' || typeof reservationTime !== 'string') {
             throw "Parameters must be of correct type";
         }
     if (restaurantId.replace(/\s/g, "") === "" || customerId.replace(/\s/g, "") === "" || reservationDate.replace(/\s/g, "") === "" ||
@@ -27,10 +27,6 @@ const create = async function create(restaurantId, customerId, reservationDate, 
     }
     if (no_of_guests < 1 || no_of_guests > 10) {
         throw "Number of guests must be between 1 and 10";
-    }
-
-    if (table < 1 || table > 20) {
-        throw "Table must be between 1 and 20";
     }
 
     if (!isValidDate(reservationDate)) {
@@ -59,8 +55,7 @@ const create = async function create(restaurantId, customerId, reservationDate, 
         customerId: restaurantId.toString(),
         reservationDate: reservationDate,
         reservationTime: reservationTime,
-        no_of_guests: no_of_guests,
-        table: table
+        no_of_guests: no_of_guests
     };
     customer.reservations.push(newReservation);
     restaurant.reservations.push(newReservation);

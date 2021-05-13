@@ -18,9 +18,36 @@ router.get('/', async(req, res) => {
     }catch(e){
         res.status(500).json({error: e});
     }
-})
+});
 
-router.get('/restuarant/:id', async(req, res) =>{
+router.post('/confirm/:id', async(req, res) => {
+    let date = req.body.reservationDate.toString();
+    let time = req.body.reservationTime.toString();
+    let nopeople = Number(req.body.no_of_guests);
+    let restaurant = await restaurantData.get(req.params.id);
+    let allRestaurants = await restaurantData.getAll();
+    console.log(typeof nopeople);
+    try{
+        let newReservation = await reservationsData.create(req.params.id, req.session.customer._id, date, time, nopeople);
+        console.log(newReservation);
+        res.render("reservation/openRestaurants", {restaurants: allRestaurants});
+    }catch(e){
+        console.log(e);
+        res.render("reservation/table", {restaurant: restaurant, customer: req.session.customer, error: e});
+    }
+});
+
+router.get('/restaurant/:id', async(req, res) => {
+    let customer = req.session.customer;
+    try{
+        let restaurant = await restaurantData.get(req.params.id);
+        res.render("reservation/table", {customer: customer, restaurant: restaurant});
+    }catch(e){
+        res.status(500).json({error: e});
+    }
+});
+
+router.get('/restuarant/getall/:id', async(req, res) =>{
     try {
         let restaurant = await restaurantData.getId(req.params.id);
         let reservations = restaurant.reservations;

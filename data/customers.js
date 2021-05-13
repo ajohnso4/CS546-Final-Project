@@ -15,10 +15,10 @@ const create = async function create(firstName, lastName, email, phone, city, st
         phone.replace(/\s/g, "") === "" || city.replace(/\s/g, "") === "" || state.replace(/\s/g, "") === "" || passwordHash.replace(/\s/g, "") === "") {
         throw "Parameters cannot be empty strings.";
     }
-    let regex = /^\d{3}\d{3}\d{4}$/;
-    if (!regex.test(phone)) {
-        throw "Phone number is in wrong format.";
-    }
+    // let regex = /^\d{3}\d{3}\d{4}$/;
+    // if (!regex.test(phone)) {
+    //     throw "Phone number is in wrong format.";
+    // }
     const customersCollection = await customers();
     let newCustomer = {
         firstName: firstName,
@@ -112,10 +112,10 @@ const update = async function update(id, updatedCustomer) {
         updatedCustomer.phone.replace(/\s/g, "") === "" || updatedCustomer.city.replace(/\s/g, "") === "" || updatedCustomer.state.replace(/\s/g, "") === "" || updatedCustomer.passwordHash.replace(/\s/g, "") === "") {
         throw "Parameters cannot be empty strings.";
     }
-    let regex = /^\d{3}-\d{3}-\d{4}$/;
-    if (!regex.test(updatedCustomer.phone)) {
-        throw "Phone number is in wrong format.";
-    }
+    // let regex = /^\d{3}-\d{3}-\d{4}$/;
+    // if (!regex.test(updatedCustomer.phone)) {
+    //     throw "Phone number is in wrong format.";
+    // }
     const updatedCustomerData = {};
     if (updatedCustomer.firstName) {
         updatedCustomerData.firstName = updatedCustomer.firstName;
