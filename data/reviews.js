@@ -39,6 +39,7 @@ const create = async function create(restaurantId, customerId, review, rating) {
         _id: newId,
         restaurantId: customerId.toString(),
         customerId: restaurantId.toString(),
+        fullName: `${customer.firstName} ${customer.lastName}`, 
         review: review,
         rating: rating
     };
