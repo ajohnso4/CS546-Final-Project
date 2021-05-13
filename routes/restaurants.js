@@ -37,6 +37,14 @@ router.post('/register', async(req, res) => {
     }
 });
 
+router.get('/login', async(req, res) => {
+    if (req.session.restaurant) {
+        return res.redirect("private");
+    } else {
+        return res.status(200).render("restaurants/login");
+    }
+})
+
 router.post('/login', async(req, res) => {
     let restaurantName = req.body.restaurantName;
     let password = req.body.password;
@@ -68,6 +76,14 @@ router.post('/login', async(req, res) => {
     }
     
 });
+
+router.get('/reservation', async(req, res) => {
+    if (!req.session.restaurant) {
+        return res.redirect('/')
+    }
+    let restaurant = req.session.restaurant
+    return res.render('restaurants/reservation', {reservation: restaurant.reservations})
+})
 
 router.get('/logout', async(req, res) => {
     req.session.destroy();
