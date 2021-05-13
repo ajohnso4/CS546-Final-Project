@@ -5,11 +5,6 @@ const router = express.Router();
 const customerData = require('../data/customers');
 const restaurantData = require('../data/restaurants');
 const reviewsData = require('../data/reviews');
-const bcrypt = require('bcryptjs');
-
-//Get all the reviews for a particular restaurant
-//Get all reviews for a person
-//Post review to restaurant from person
 
 router.get('/restuarant/:id', async(req, res) =>{
     try {
