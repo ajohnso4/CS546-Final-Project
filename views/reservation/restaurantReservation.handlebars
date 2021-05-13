@@ -1,0 +1,29 @@
+<head>
+    <link rel="stylesheet" href="../../public/css/cards.css">
+</head>
+<section>
+    <nav class="topnav">
+        <a href="/">Home</a>
+        <a href="/restaurants/private">Profile</a>
+        <a class="active" href="/reservations">Reservations Made</a>
+        <a href="/reviews">Reviews</a>
+    </nav>
+</section>
+
+<section>
+<div class="content">
+    <section>
+    {{#each reservations}}
+    <div class="card">
+        <div class="container">
+            <h4>Customer First Name:<b>{{customer.firstName}}</b></a></h4>
+            <h4>Customer Last Name:<b>{{customer.lastName}}</b></a></h4>
+            <h4>Number of people:<b>{{this.no_of_guests}}</b></a></h4>
+            <h4>Date:<b>{{this.reservationDate}}</b></a></h4>
+            <h4>Time:<b>{{this.reservationTime}}</b></a></h4>
+        </div>
+    </div>
+    {{/each}}
+    </section>
+</div>
+</section>
