@@ -4,20 +4,23 @@
 <section>
     <nav class="topnav">
         <a href="/">Home</a>
-        <a class="active" href="/customers/login">Customers</a>
-        <a href="/restaurants/login">Restaurant</a>
+        <a href="/customers/private">Profile</a>
+        <a class="active" href="/reservations">Book a Table</a>
         <a href="/reviews">Reviews</a>
     </nav>
 </section>
+
 <div class="content">
+    <section>
     {{#each restaurants}}
     <div class="card">
-        <img src="https://lh3.googleusercontent.com/proxy/OGMd5I4FYFLVVsqj4h1MDwDGikz9Iz4u-RNLFWlrx1wFWf2grDAmDxQTRWDDli6w364JqKGobnVwpspZjP7smZhJd7XO7YKIJpu8Y9WeSUGmo7VUquk" alt="Avatar">
+        {{!-- <img src="https://lh3.googleusercontent.com/proxy/OGMd5I4FYFLVVsqj4h1MDwDGikz9Iz4u-RNLFWlrx1wFWf2grDAmDxQTRWDDli6w364JqKGobnVwpspZjP7smZhJd7XO7YKIJpu8Y9WeSUGmo7VUquk" alt="Avatar"> --}}
         <div class="container">
-            <h4><b>{{this.name}}</b></h4>
+            <h2><b>{{this.name}}</b></h2>
             <p>{{this.description}}</p>
             <button href="reservation/{{this._id}}">Make a Reservation Here</button>
         </div>
     </div>
     {{/each}}
+    </section>
 </div>

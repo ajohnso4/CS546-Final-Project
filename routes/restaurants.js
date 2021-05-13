@@ -14,6 +14,14 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/login', async(req, res) => {
+    if(!req.session.restaurant){
+        res.status(200).render("restaurants/login");
+    } else {
+        res.redirect("/restaurants/private")
+    }
+});
+
 router.get('/register', async(req, res) => {
     return  res.status(200).render("restaurants/register");
 });
