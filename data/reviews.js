@@ -1,5 +1,6 @@
 const mongoCollections = require("../config/mongoCollections");
 const ObjectId = require('mongodb').ObjectId;
+const reviews = mongoCollections.reviews;
 const customersData = require("./customers");
 const restaurantsData = require("./restaurants");
 
@@ -29,10 +30,11 @@ const create = async function create(restaurantId, customerId, review, rating) {
     } catch (e) {
         throw "Customer ID is invalid.";
     }
-    let newId = new ObjectId();
-    newId = newId.toString();
+    // let newId = new ObjectId();
+    // newId = newId.toString();
     let customer = await customersData.get(customerId.toString());
     let restaurant = await restaurantsData.get(restaurantId.toString());
+    let reviewCollection = await reviews();
     const newReview = {
         _id: newId,
         restaurantId: customerId.toString(),
@@ -40,11 +42,17 @@ const create = async function create(restaurantId, customerId, review, rating) {
         review: review,
         rating: rating
     };
+
+    const insertInfo = await reviewCollection.insertOne(newReview);
+    if (insertInfo.insertedCount === 0) throw "Could not add review";
+    const newId = insertInfo.insertedId;
+
+    const getReview = await get(newId.toString());
     customer.reviews.push(newReview);
     restaurant.reviews.push(newReview);
     await customersData.update(customerId.toString(), customer);
     await restaurantsData.update(restaurantId.toString(), restaurant);
-    return newReview;
+    return getReview;
 
 }
 //gets a review from review ID
@@ -73,6 +81,15 @@ const get = async function get(id) {
     if (found == 0) {
         throw "Review ID not found.";
     }
+}
+
+const getAll = async function getAll() {
+    const reviewsCollection = await reviews();
+    let reviewsList = await reviewsCollection.find({}).toArray();
+    for (let item of reviewsList) {
+        item._id = item._id.toString();
+    }
+    return reviewsList;
 }
 //gets all reviews that a customer made
 const getAllFromCustomer = async function getAllFromCustomer(id) {
@@ -159,5 +176,6 @@ module.exports = {
     getAllFromCustomer,
     getAllFromRestaurant,
     get,
+    getAll,
     remove
 }

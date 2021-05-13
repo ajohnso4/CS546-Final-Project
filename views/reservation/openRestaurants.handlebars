@@ -10,13 +10,13 @@
     </nav>
 </section>
 
+<section>
 <div class="content">
     <section>
     {{#each restaurants}}
     <div class="card">
-        {{!-- <img src="https://lh3.googleusercontent.com/proxy/OGMd5I4FYFLVVsqj4h1MDwDGikz9Iz4u-RNLFWlrx1wFWf2grDAmDxQTRWDDli6w364JqKGobnVwpspZjP7smZhJd7XO7YKIJpu8Y9WeSUGmo7VUquk" alt="Avatar"> --}}
         <div class="container">
-            <h2><b>{{this.name}}</b></h2>
+            <h2><a href={{this.website}} target="_blank"><b>{{this.name}}</b></a></h2>
             <p>{{this.description}}</p>
             <button href="reservation/{{this._id}}">Make a Reservation Here</button>
         </div>
@@ -24,3 +24,4 @@
     {{/each}}
     </section>
 </div>
+</section>

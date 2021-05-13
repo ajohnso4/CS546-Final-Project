@@ -2,16 +2,16 @@ const mongoCollections = require("../config/mongoCollections");
 const ObjectId = require('mongodb').ObjectId;
 const restaurants = mongoCollections.restaurants;
 
-const create = async function create(name, address, email, phone, description, passwordHash) {
-    if (name === undefined || address === undefined || email === undefined || phone === undefined ||
+const create = async function create(name, website, address, email, phone, description, passwordHash) {
+    if (name === undefined || address === undefined ||website === undefined || email === undefined || phone === undefined ||
         description === undefined || passwordHash === undefined) {
         throw "All parameters must be provided.";
     }
-    if (typeof name !== 'string' || typeof address !== 'string' || typeof email !== 'string' ||
+    if (typeof name !== 'string' || typeof website !== 'string'|| typeof address !== 'string' || typeof email !== 'string' ||
         typeof phone !== 'string' || typeof description !== 'string' || typeof passwordHash !== 'string') {
         throw "Incorrect paramaters type.";
     }
-    if (name.replace(/\s/g, "") === "" || address.replace(/\s/g, "") === "" || email.replace(/\s/g, "") === "" ||
+    if (name.replace(/\s/g, "") === "" || website.replace(/\s/g, "") === ""|| address.replace(/\s/g, "") === "" || email.replace(/\s/g, "") === "" ||
         phone.replace(/\s/g, "") === "" || description.replace(/\s/g, "") === "" || passwordHash.replace(/\s/g, "") === "") {
         throw "Parameters cannot be empty strings.";
     }
@@ -23,6 +23,7 @@ const create = async function create(name, address, email, phone, description, p
     const restaurantsCollection = await restaurants();
     let newRestaurant = {
         name: name,
+        website:website,
         address: address,
         email: email,
         phone: phone,
