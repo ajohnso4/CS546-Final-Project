@@ -16,10 +16,10 @@ const create = async function create(name, website, address, email, phone, descr
         throw "Parameters cannot be empty strings.";
     }
     // Can not write dashes in the form for now
-    let regex = /^\d{3}\d{3}\d{4}$/;
-    if (!regex.test(phone)) {
-        throw "Phone number is in wrong format.";
-    }
+    // let regex = /^\d{3}\d{3}\d{4}$/;
+    // if (!regex.test(phone)) {
+    //     throw "Phone number is in wrong format.";
+    // }
     const restaurantsCollection = await restaurants();
     let newRestaurant = {
         name: name,
@@ -100,10 +100,10 @@ const update = async function update(id, updatedRestaurant) {
         updatedRestaurant.phone.replace(/\s/g, "") === "" || updatedRestaurant.description.replace(/\s/g, "") === "" || updatedRestaurant.passwordHash.replace(/\s/g, "") === "") {
         throw "Parameters cannot be empty strings.";
     }
-    let regex = /^\d{3}-\d{3}-\d{4}$/;
-    if (!regex.test(updatedRestaurant.phone)) {
-        throw "Phone number is in wrong format.";
-    }
+    // let regex = /^\d{3}-\d{3}-\d{4}$/;
+    // if (!regex.test(updatedRestaurant.phone)) {
+    //     throw "Phone number is in wrong format.";
+    // }
     const updatedRestaurantData = {};
     if (updatedRestaurant.name) {
         updatedRestaurantData.name = updatedRestaurant.name;
