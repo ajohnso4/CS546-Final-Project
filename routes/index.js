@@ -9,7 +9,13 @@ const constructorMethod = (app) => {
     app.use('/restaurants', restaurants);
     app.use('/reservations', reservations);
     app.get('/', (req, res) => {
-        res.render('home/home', {Title: 'Restaurant Table Reservation Page'});
+        if (req.session.restaurant) {
+            res.redirect("restaurants/private");
+        } else if (req.session.customer) {
+            res.redirect("customers/private");
+        } else {
+            res.render('home/home', {Title: 'Restaurant Table Reservation Page'});
+        }
     });
     app.use('*', (req, res) => {
         res.status(404).json({error: 'Not found'});
