@@ -23,7 +23,7 @@ router.get('/', async(req, res) => {
 router.post('/confirm/:id', async(req, res) => {
     let date = req.body.reservationDate.toString();
     let time = req.body.reservationTime.toString();
-    let nopeople = Number(req.body.no_of_guests);
+    let nopeople = Number.parseInt(req.body.no_of_guests);
     let restaurant = await restaurantData.get(req.params.id);
     let allRestaurants = await restaurantData.getAll();
     console.log(typeof nopeople);
