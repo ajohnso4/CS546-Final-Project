@@ -30,15 +30,15 @@ const create = async function create(restaurantId, customerId, review, rating) {
     } catch (e) {
         throw "Customer ID is invalid.";
     }
-    // let newId = new ObjectId();
-    // newId = newId.toString();
+    let newId = new ObjectId();
+    newId = newId.toString();
     let customer = await customersData.get(customerId.toString());
     let restaurant = await restaurantsData.get(restaurantId.toString());
     let reviewCollection = await reviews();
     const newReview = {
         _id: newId,
-        restaurantId: customerId.toString(),
-        customerId: restaurantId.toString(),
+        restaurantId: restaurantId.toString(),
+        customerId: customerId.toString(),
         fullName: `${customer.firstName} ${customer.lastName}`, 
         review: review,
         rating: rating
@@ -46,14 +46,14 @@ const create = async function create(restaurantId, customerId, review, rating) {
 
     const insertInfo = await reviewCollection.insertOne(newReview);
     if (insertInfo.insertedCount === 0) throw "Could not add review";
-    const newId = insertInfo.insertedId;
+    //const newId = insertInfo.insertedId;
 
-    const getReview = await get(newId.toString());
+    //const getReview = await get(newId.toString());
     customer.reviews.push(newReview);
     restaurant.reviews.push(newReview);
     await customersData.update(customerId.toString(), customer);
     await restaurantsData.update(restaurantId.toString(), restaurant);
-    return getReview;
+    return newReview;
 
 }
 //gets a review from review ID
@@ -172,11 +172,21 @@ const remove = async function remove(id) {
     }
     return { reviewId: id.toString(), deleted: true };
 }
+
+const hasReviewed = async function hasReviewed(restaurantId, reviews) {
+    for (i in reviews) {
+        if (reviews[i].restaurantId = restaurantId) {
+            return true;
+        }
+    }
+    return false;
+}
 module.exports = {
     create,
     getAllFromCustomer,
     getAllFromRestaurant,
     get,
     getAll,
+    hasReviewed,
     remove
 }
