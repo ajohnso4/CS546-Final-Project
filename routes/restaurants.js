@@ -90,7 +90,8 @@ router.get('/reservation', async(req, res) => {
         return res.redirect('/')
     }
     let restaurant = req.session.restaurant
-    return res.render('restaurants/reservation', {reservation: restaurant.reservations})
+    console.log(restaurant.reservations[0].firstName)
+    return res.render('reservation/restaurantReservation', {reservations: restaurant.reservations})
 })
 
 router.get('/logout', async(req, res) => {

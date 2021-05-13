@@ -53,6 +53,7 @@ const create = async function create(restaurantId, customerId, reservationDate, 
         _id: newId,
         restaurantId: customerId.toString(),
         customerId: restaurantId.toString(),
+        fullName: `${customer.firstName} ${customer.lastName}`,
         reservationDate: reservationDate,
         reservationTime: reservationTime,
         no_of_guests: no_of_guests
