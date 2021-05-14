@@ -34,11 +34,12 @@ router.get('/private', async(req, res) => {
 router.post('/register', async(req, res) => {
     let restaurant = req.body;
     const password = await bcrypt.hash(restaurant.passwordHash, 16);
-    let restaurantDetails
+    let restaurantDetails;
     try{
         restaurantDetails = await restaurantData.create(restaurant.name, restaurant.website, restaurant.address, restaurant.email, restaurant.phone,
                                         restaurant.description, password);
         req.session.restaurant = restaurantDetails;
+        console.log(restaurantDetails);
         res.redirect('/restaurants/private');
     }catch(e){
         res.status(500).render("restaurants/register", {layout: false, hasError: true, errors: [e]});

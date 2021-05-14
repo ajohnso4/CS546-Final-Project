@@ -35,13 +35,11 @@ const create = async function create(restaurantId, customerId, reservationDate, 
 
     try {
         restaurantId = new ObjectId(restaurantId);
-        console.log(restaurantId)
     } catch (e) {
         throw "Restaurant ID is invalid.";
     }
     try {
         customerId = new ObjectId(customerId);
-        console.log(customerId)
     } catch (e) {
         throw "Customer ID is invalid.";
     }
