@@ -17,7 +17,7 @@
         <a href="/reviews/restaurant/{{restaurant._id}}">Reviews</a>
     </nav>
 </section>
-{{#if isCustomer}}
+{{#if showForm}}
     <form method="POST" action="/reviews/customer/{{restaurant._id}}" id="review-form" novalidate>
             <div class="container">
                 <div class="col form-group">
@@ -36,6 +36,17 @@
                 <div class = "error">{{this}}</div>
             {{/each}}
     </form>
+{{/if}}
+{{#if hasReview}}
+    <div class="col align-self-center">
+        <h3>Your Review</h1>
+        <h4>{{review.fullName}}</h4>
+        <h4>{{review.rating}}</h4>
+        <h4>{{review.review}}</h4>
+        <form action="/reviews/delete/{{review._id}}" method="POST">
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+    </div>
 {{/if}}
 <h1>Reviews for {{restaurant.name}}</h1>
 <div class ="content">
