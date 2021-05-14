@@ -23,7 +23,7 @@ router.get('/restaurant/:id', async(req, res) =>{
         if (customer) {
             reviewed = await reviewsData.hasReviewed(req.params.id, customer.reviews);
             if (reviewed) {
-                res.render('review/restaurantReview', {restaurant: restaurant, showForm: false, hasReview: true, review: reviewed});
+                res.render('review/restaurantReview', {restaurant: restaurant, showForm: true, hasReview: true, review: reviewed});
             } else {
                 res.render('review/restaurantReview', {restaurant: restaurant, showForm: true, hasReview: false});
             }
