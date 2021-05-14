@@ -33,5 +33,14 @@
     </div>
     {{/each}}
     </section>
+    {{#if hasError}}
+    {{#each errors}}
+    <ul>
+        <li class="error">
+            {{this}}
+        </li>
+    </ul>
+    {{/each}}
+    {{/if}}
 </div>
 </section>

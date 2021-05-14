@@ -25,13 +25,17 @@ router.post('/confirm/:id', async(req, res) => {
     let nopeople = Number.parseInt(req.body.no_of_guests);
     let restaurant = await restaurantData.get(req.params.id);
     let allRestaurants = await restaurantData.getAll();
-    console.log(typeof nopeople);
+    let allReservationsByCustomer = await reservationsData.getAllFromCustomer(req.session.customer._id);
+    for (let item of allReservationsByCustomer) {
+        console.log(item);
+        if (item.reservationTime == time && item.reservationDate == date) {
+            res.render("reservation/customerReservation", {hasError: true, errors: ["Reservation already made for time."]})
+        }
+    }
     try{
         let newReservation = await reservationsData.create(req.params.id, req.session.customer._id, date, time, nopeople);
-        console.log(newReservation);
         res.render("reservation/openRestaurants", {restaurants: allRestaurants});
     }catch(e){
-        console.log(e);
         res.render("reservation/table", {restaurant: restaurant, customer: req.session.customer, error: e});
     }
 });
