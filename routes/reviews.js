@@ -12,9 +12,8 @@ router.get('/restaurant/:id', async(req, res) =>{
         let customer = req.session.customer;
         if (customer) {
             reviewed = await reviewsData.hasReviewed(req.params.id, customer.reviews);
-            console.log(reviewed);
             if (reviewed) {
-                res.render('review/restaurantReview', {restaurant: restaurant, showForm: false, hasReview: true, review: reviewed});
+                res.render('review/restaurantReview', {restaurant: restaurant, showForm: true, hasReview: true, review: reviewed});
             } else {
                 res.render('review/restaurantReview', {restaurant: restaurant, showForm: true, hasReview: false});
             }
