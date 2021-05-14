@@ -16,11 +16,11 @@ router.get('/', async(req, res) => {
     try{
         let restaurants = await restaurantData.getAll();
         
-        if(req.session.restaurant){
+        if(req.session.customer){
          return res.render('reservation/openRestaurants', {restaurants: restaurants});
         }
 
-        if(req.session.customer){
+        if(req.session.restaurant){
             return res.render('review/restaurantsList', {restaurants: restaurants});
         }
 
@@ -36,10 +36,9 @@ router.post('/confirm/:id', async(req, res) => {
     let nopeople = Number.parseInt(req.body.no_of_guests);
     let restaurant = await restaurantData.get(req.params.id);
     let allRestaurants = await restaurantData.getAll();
-    console.log(typeof nopeople);
     try{
         let newReservation = await reservationsData.create(req.params.id, req.session.customer._id, date, time, nopeople);
-        console.log(newReservation);
+        let restaurantFound = await restaurantData.get(req.params.id);
         res.render("reservation/openRestaurants", {restaurants: allRestaurants});
     }catch(e){
         console.log(e);
