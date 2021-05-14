@@ -8,22 +8,11 @@ const reviewsData = require('../data/reviews');
 const reservationsData = require('../data/reservations');
 const bcrypt = require('bcryptjs');
 
-//Get all the reviews for a particular restaurant
-//Get all reviews for a person
-//Post review to restaurant from person
+//Get the list of restaurants
 router.get('/', async(req, res) => {
-
     try{
         let restaurants = await restaurantData.getAll();
-        
-        if(req.session.restaurant){
-         return res.render('reservation/openRestaurants', {restaurants: restaurants});
-        }
-
-        if(req.session.customer){
-            return res.render('review/restaurantsList', {restaurants: restaurants});
-        }
-
+        return res.render('reservation/openRestaurants', {restaurants: restaurants});
     }catch(e){
         res.status(500).json({error: e});
     }
