@@ -8,11 +8,8 @@ const reviewsData = require('../data/reviews');
 const reservationsData = require('../data/reservations');
 const bcrypt = require('bcryptjs');
 
-//Get all the reviews for a particular restaurant
-//Get all reviews for a person
-//Post review to restaurant from person
+//Get the list of restaurants
 router.get('/', async(req, res) => {
-
     try{
         let restaurants = await restaurantData.getAll();
         
@@ -23,7 +20,6 @@ router.get('/', async(req, res) => {
         if(req.session.restaurant){
             return res.render('review/restaurantsList', {restaurants: restaurants});
         }
-
     }catch(e){
         res.status(500).json({error: e});
     }
@@ -36,12 +32,17 @@ router.post('/confirm/:id', async(req, res) => {
     let nopeople = Number.parseInt(req.body.no_of_guests);
     let restaurant = await restaurantData.get(req.params.id);
     let allRestaurants = await restaurantData.getAll();
+    let allReservationsByCustomer = await reservationsData.getAllFromCustomer(req.session.customer._id);
+    for (let item of allReservationsByCustomer) {
+        console.log(item);
+        if (item.reservationTime == time && item.reservationDate == date) {
+            res.render("reservation/customerReservation", {hasError: true, errors: ["Reservation already made for time."]})
+        }
+    }
     try{
         let newReservation = await reservationsData.create(req.params.id, req.session.customer._id, date, time, nopeople);
-        let restaurantFound = await restaurantData.get(req.params.id);
         res.render("reservation/openRestaurants", {restaurants: allRestaurants});
     }catch(e){
-        console.log(e);
         res.render("reservation/table", {restaurant: restaurant, customer: req.session.customer, error: e});
     }
 });

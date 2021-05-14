@@ -6,22 +6,29 @@ const customerData = require('../data/customers');
 const restaurantData = require('../data/restaurants');
 const reviewsData = require('../data/reviews');
 
+
+router.get('/', async(req, res) => {
+    try{
+        let restaurants = await restaurantData.getAll();
+        return res.render('review/restaurantsList', {restaurants: restaurants});
+    }catch(e){
+        res.status(500).json({error: e});
+    }
+
+});
 router.get('/restaurant/:id', async(req, res) =>{
     try {
         let restaurant = await restaurantData.get(req.params.id);
         let customer = req.session.customer;
-        console.log(restaurant)
-        console.log(customer)
         if (customer) {
             reviewed = await reviewsData.hasReviewed(req.params.id, customer.reviews);
-            console.log(reviewed);
             if (reviewed) {
-                res.render('review/restaurantReview', {restaurant: restaurant, isCustomer: false});
+                res.render('review/restaurantReview', {restaurant: restaurant, showForm: true, hasReview: true, review: reviewed});
             } else {
-                res.render('review/restaurantReview', {restaurant: restaurant, isCustomer: true, customer: req.session.customer});
+                res.render('review/restaurantReview', {restaurant: restaurant, showForm: true, hasReview: false});
             }
         } else {
-            res.render('review/restaurantReview', {restaurant: restaurant, isCustomer: false});
+            res.render('review/restaurantReview', {restaurant: restaurant, showForm: false, hasReview: false});
         }
         
     }catch(e){
@@ -62,6 +69,14 @@ router.post('/customer/:id', async(req, res) => {
         }catch(e){
             res.status(500).json({error: e.toString()});
         }
+    }
+});
+
+router.post('/delete/:id', async(req, res) => {
+    try {
+        let review = reviewsData.remove(req.params.id);
+    } catch (e) {
+        res.status(500).json({error: e.toString()});
     }
 });
 
