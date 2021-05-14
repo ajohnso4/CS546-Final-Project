@@ -5,8 +5,7 @@
     <nav class="topnav">
         <a href="/">Home</a>
         <a href="/customers/private">Profile</a>
-        <a href="/reservations">Book a Table</a>
-        <a class="active" href="/reservations/made">Reservations Made</a>
+        <a class="active" href="/customers/reservations">Reservations Made</a>
         <a href="/reviews">Reviews</a>
     </nav>
 </section>
@@ -17,10 +16,16 @@
     {{#each reservations}}
     <div class="card">
         <div class="container">
-            <h4>Restaurant Name:<b>{{restaurant.name}}</b></a></h4>
-            <h4>Number of people:<b>{{this.no_of_guests}}</b></a></h4>
-            <h4>Date:<b>{{this.reservationDate}}</b></a></h4>
-            <h4>Time:<b>{{this.reservationTime}}</b></a></h4>
+            <h4>Restaurant</h4>
+             <textarea rows="1" readonly>{{this.name}} </textarea> 
+            <h4>Address</h4>
+            <textarea rows="2" readonly>{{this.address}} </textarea> 
+            <h4>Number of People</h4>
+            <textarea rows="1" readonly>{{this.no_of_guests}} </textarea> 
+            <h4>Date</h4>
+            <input type="date" value={{this.reservationDate}} readonly />
+            <h4>Time</h4>
+            <input type="time" value= {{this.reservationTime}} readonly />
         </div>
     </div>
     {{/each}}

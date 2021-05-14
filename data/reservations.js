@@ -51,8 +51,8 @@ const create = async function create(restaurantId, customerId, reservationDate, 
     let restaurant = await restaurantsData.get(restaurantId.toString());
     const newReservation = {
         _id: newId,
-        restaurantId: customerId.toString(),
-        customerId: restaurantId.toString(),
+        restaurantId: restaurantId.toString(),
+        customerId: customerId.toString(),
         fullName: `${customer.firstName} ${customer.lastName}`,
         reservationDate: reservationDate,
         reservationTime: reservationTime,

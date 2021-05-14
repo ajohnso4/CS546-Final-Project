@@ -16,10 +16,10 @@
     {{#each reservations}}
     <div class="card">
         <div class="container">
-            <h4>Customer Name: <b>{{this.fullName}}</b></a></h4>
-            <h4>Number of people: <b>{{this.no_of_guests}}</b></a></h4>
-            <h4>Date: <b>{{this.reservationDate}}</b></a></h4>
-            <h4>Time: <b>{{this.reservationTime}}</b></a></h4>
+            <h2>{{this.fullName}}</h2>
+            <h4>Table for {{this.no_of_guests}}</h4>
+            <h5>Date:<input type="date" value={{this.reservationDate}} readonly /></a></h5>
+            <h5>Time:<input type="time" value={{this.reservationTime}} readonly /></a></h5>
         </div>
     </div>
     {{/each}}
