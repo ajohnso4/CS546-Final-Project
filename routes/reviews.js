@@ -10,6 +10,8 @@ router.get('/restaurant/:id', async(req, res) =>{
     try {
         let restaurant = await restaurantData.get(req.params.id);
         let customer = req.session.customer;
+        console.log(restaurant)
+        console.log(customer)
         if (customer) {
             reviewed = await reviewsData.hasReviewed(req.params.id, customer.reviews);
             console.log(reviewed);

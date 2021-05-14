@@ -1,0 +1,28 @@
+<head>
+    <link rel="stylesheet" href="../../public/css/cards.css">
+</head>
+<section>
+    <nav class="topnav">
+        <a href="/">Home</a>
+        <a href="/customers/private">Profile</a>
+        <a href="/reservations">Book a Table</a>
+        <a href="/customers/reservations">Reservations Made</a>
+        <a href="/reservations">Write Reviews</a>
+    </nav>
+</section>
+
+<section>
+<div class="content">
+    <section>
+    {{#each restaurants}}
+    <div class="card">
+        <div class="container">
+            <h2><a href={{this.website}} target="_blank"><b>{{this.name}}</b></a></h2>
+            <p>{{this.description}}</p>
+            <a href="/reviews/restaurant/{{this._id}}"><button>Write a Review</button></a>
+        </div>
+    </div>
+    {{/each}}
+    </section>
+</div>
+</section>

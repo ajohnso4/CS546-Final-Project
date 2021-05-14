@@ -176,6 +176,7 @@ const remove = async function remove(id) {
 const hasReviewed = async function hasReviewed(restaurantId, reviews) {
     for (i in reviews) {
         if (reviews[i].restaurantId = restaurantId) {
+            console.log("test")
             return true;
         }
     }

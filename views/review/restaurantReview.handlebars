@@ -11,10 +11,11 @@
 <body>
 <section>
     <nav class="topnav">
-        <a  href="/">Home</a>
-        <a  class="active" href="/restaurants/private">Profile</a>
-        <a href="/restaurants/reservation">No. of Reservation</a>
-        <a href="/reviews/restaurant/{{restaurant._id}}">Reviews</a>
+        <a href="/customers/private">Profile</a>
+        <a href="/reservations">Book a Table</a>
+        <a href="/customers/reservations">Reservations Made</a>
+        <a class="active" href="/reviews/restaurant/{{restaurant._id}}">Review</a>
+
     </nav>
 </section>
 {{#if isCustomer}}
