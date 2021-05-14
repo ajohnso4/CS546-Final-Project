@@ -5,12 +5,18 @@ const router = express.Router();
 const customerData = require('../data/customers');
 const restaurantData = require('../data/restaurants');
 const reviewsData = require('../data/reviews');
+const path = require('path');
 
 
 router.get('/', async(req, res) => {
     try{
-        let restaurants = await restaurantData.getAll();
-        return res.render('review/restaurantsList', {restaurants: restaurants});
+        if (req.session.customer) {
+            let restaurants = await restaurantData.getAll();
+            return res.render('review/restaurantsList', {restaurants: restaurants});
+        } else {
+            res.sendFile(path.resolve('public/html/reviews.html'));
+        }
+
     }catch(e){
         res.status(500).json({error: e});
     }
@@ -80,4 +86,12 @@ router.post('/delete/:id', async(req, res) => {
     }
 });
 
+router.get('/allReviews', async(req, res) => {
+    try{
+        let reservations = await reviewsData.getAll();
+        res.json(reservations);
+    } catch (e) {
+        res.status(500).json({error: e});
+    }
+});
 module.exports = router;
