@@ -15,9 +15,12 @@
 <section>
 <div class="content">
     <section>
+    {{#unless restaurants.length}}
+    <h3>No reservations have been made.</h3>
+    {{/unless}}
     {{#each reservations}}
     <div class="card">
-        <div class="container">
+        <div class="container" id="{{this.id}}">
             <h4>Restaurant</h4>
              <textarea rows="1" readonly>{{this.name}} </textarea> 
             <h4>Address</h4>
@@ -28,7 +31,7 @@
             <input type="date" value={{this.reservationDate}} readonly />
             <h4>Time</h4>
             <input type="time" value= {{this.reservationTime}} readonly />
-            <p><button class="btn" ><i class="fa fa-trash" ></i></button></p>
+            <a href="/customers/resdelete/{{this.id}}"><p><button class="btn" ><i class="fa fa-trash" ></i></button></p></a>
         </div>
     </div>
     {{/each}}

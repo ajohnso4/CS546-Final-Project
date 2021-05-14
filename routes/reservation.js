@@ -12,7 +12,14 @@ const bcrypt = require('bcryptjs');
 router.get('/', async(req, res) => {
     try{
         let restaurants = await restaurantData.getAll();
-        return res.render('reservation/openRestaurants', {restaurants: restaurants});
+        
+        if(req.session.customer){
+         return res.render('reservation/openRestaurants', {restaurants: restaurants});
+        }
+
+        if(req.session.restaurant){
+            return res.render('review/restaurantsList', {restaurants: restaurants});
+        }
     }catch(e){
         res.status(500).json({error: e});
     }

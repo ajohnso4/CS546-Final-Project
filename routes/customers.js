@@ -2,7 +2,8 @@ const express = require('express');
 const { customers } = require('../config/mongoCollections');
 const router = express.Router();
 const customerData = require('../data/customers');
-const restaurantData = require('../data/restaurants')
+const restaurantData = require('../data/restaurants');
+const reservationData = require('../data/reservations');
 const reviewsData = require('../data/reviews');
 const bcrypt = require('bcryptjs');
 const e = require('express');
@@ -48,6 +49,10 @@ router.post("/login", async (req, res) => {
     let password = req.body.password;
     if (email && password) {
         let userID = await customerData.getfromEmail(email);
+        if(userID == -1){
+            res.render("users/login", {title: "Login Screen", errors: ["Invalid email"]});
+        }else{
+        console.log(userID);
         let customer = await customerData.get(userID)
         if (customer != -1) {
             let validPwd = await bcrypt.compareSync(password, customer.passwordHash);
@@ -61,6 +66,7 @@ router.post("/login", async (req, res) => {
         } else {
             res.render("users/login", { title: "Login Screen", errors: ["Invalid Login Information"] });
         }
+    }
     } else {
         res.render("users/login", { title: "Login Screen", errors: ["Invalid Login Information"] });
     }
@@ -77,7 +83,7 @@ router.get('/reservations', async (req, res) => {
     if (!req.session.customer) {
         res.redirect("/")
     }
-    let customer = req.session.customer;
+    let customer = await customerData.get(req.session.customer._id);
     let id = customer._id;
     let custReservations = customer.reservations;
     let reservations = []
@@ -86,19 +92,16 @@ router.get('/reservations', async (req, res) => {
         for (let i = 0; i < custReservations.length; i++) {
             let restaurantID = custReservations[i].restaurantId
             let restaurant = await restaurantData.get(restaurantID)
-            for (let j = 0; j < restaurant.reservations.length; j++) {
-                if (restaurant.reservations[j].customerId === id) {
                     obj = {
+                        id: custReservations[i]._id,
                         name: restaurant.name,
                         address: restaurant.address,
                         phone: restaurant.phone,
-                        no_of_guests: restaurant.reservations[j].no_of_guests,
-                        reservationDate: restaurant.reservations[j].reservationDate,
-                        reservationTime: restaurant.reservations[j].reservationTime
+                        no_of_guests: custReservations[i].no_of_guests,
+                        reservationDate: custReservations[i].reservationDate,
+                        reservationTime: custReservations[i].reservationTime
                     }
                     reservations.push(obj)
-                }
-            }
         }
 
         return res.render('reservation/customerReservation', { reservations: reservations })
@@ -111,6 +114,32 @@ router.get("/logout", (req, res) => {
     res.clearCookie('name');
     res.redirect('/');
 });
+
+router.get('/resdelete/:id', async(req, res) => {
+    let reservationid = req.params.id;
+    console.log(reservationid);
+    console.log(typeof reservationid);
+    let reservation = await reservationData.get(reservationid);
+    let customer = await customerData.get(reservation.customerId);
+    let restaurant = await restaurantData.get(reservation.restaurantId);
+    for(let i = 0; i < customer.reservations.length; i++){
+        if(customer.reservations[i]._id == reservation._id){
+            customer.reservations.splice(i, 1);
+            continue;
+        }
+    }
+    for(let i = 0; i < restaurant.reservations.length; i++){
+        if(restaurant.reservations[i]._id == reservation._id){
+            restaurant.reservations.splice(i, 1);
+            continue;
+        }
+    }
+    let newcustomer = await customerData.update(customer._id, customer);
+    let newrestaurant = await restaurantData.update(restaurant._id, restaurant);
+    console.log(newcustomer);
+    console.log(newrestaurant);
+    res.redirect('/customers/reservations');
+})
 
 router.get('/:id', async (req, res) => {
     let customer;

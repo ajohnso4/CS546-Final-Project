@@ -32,6 +32,7 @@ async function main() {
     await customersData.create("Andrew", "Johnson", "ajohnso4@stevens.edu", "4845228181", "Hoboken", "NJ", "$2b$16$6EQG4BWI.X1CGrjUbA5cT.w8HkfSQJvtqaIJnDfFYr6PwddwjVBmK");
     await customersData.create("Ali", "Kolenovic", "akolenovic@stevens.edu", "2019161502", "Hoboken", "NJ", "$2b$16$6EQG4BWI.X1CGrjUbA5cT.w8HkfSQJvtqaIJnDfFYr6PwddwjVBmK");
     await customersData.create("Manasa", "Prakash", "mgeemara@stevens.edu","2019209556","Hoboken", "NJ", "$2b$16$6EQG4BWI.X1CGrjUbA5cT.w8HkfSQJvtqaIJnDfFYr6PwddwjVBmK");
+    await customersData.create("Hamsa","Ramalingu","hramalin@stevens.edu","2014248395","Hodoken","NJ","$2b$16$6EQG4BWI.X1CGrjUbA5cT.w8HkfSQJvtqaIJnDfFYr6PwddwjVBmK")
     console.log('seeded!');
     await db.serverConfig.close();
 }
