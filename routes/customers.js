@@ -40,7 +40,7 @@ router.post('/register', async (req, res) => {
         return;
      }
      
-    if (!phone || typeof phone !== 'number' || !phone.trim()) {
+    if (!phone || typeof phone !== 'string' || !phone.trim()) {
         errors.push("Invalid phone")
         res.status(401).render('users/signup', {errors: errors})
         return;
@@ -70,7 +70,7 @@ router.post('/register', async (req, res) => {
     try {
         let customer = await customerData.create(firstName, lastName, email, phone, city, state, hashedPassword);
         req.session.customer = customer
-        res.redirect('/customers/private',{ errors: errors });
+        res.redirect('/customers/private');
     } catch (e) {
         res.status(500).json({ error: e });
     }

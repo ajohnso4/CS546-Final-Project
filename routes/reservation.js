@@ -36,12 +36,12 @@ router.post('/confirm/:id', async(req, res) => {
     
     var currentDate = new Date().toJSON().slice(0, 10);
     if(currentDate > date){
-        res.render("reservation/customerReservation", {hasError: true, errors: ["Reservation date is invalid"]});
+        res.render("reservation/table", {hasError: true, errors: ["Reservation date is invalid"],restaurant: restaurant});
     }
     else{
     for (let item of allReservationsByCustomer) {
         if (item.reservationTime == time && item.reservationDate == date) {
-            res.render("reservation/customerReservation", {hasError: true, errors: ["Reservation already made for time."]})
+            res.render("reservation/table", {hasError: true, errors: ["Reservation already made for time."], restaurant:restaurant})
         }
     }
     try{
