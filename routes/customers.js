@@ -57,6 +57,11 @@ router.get('/login', async (req, res) => {
 router.post("/login", async (req, res) => {
     let email = xss(req.body.email);
     let password = xss(req.body.password);
+    errors =[];
+    if (!email || typeof email !== 'string' || !email.trim()) {
+       res.render('users/login', {errors: ["Invalid email ID"]})
+       return;
+    }
     if (email && password) {
         let userID = await customerData.getfromEmail(email);
         if(userID == -1){
@@ -74,7 +79,7 @@ router.post("/login", async (req, res) => {
                 res.redirect('/customers/private');
             }
         } else {
-            res.render("users/login", { title: "Login Screen", errors: ["Invalid Login Information"] });
+            res.render("users/login", { title: "Login Screen", errors:errors });
         }
     }
     } else {
