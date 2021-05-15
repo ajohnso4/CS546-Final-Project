@@ -33,9 +33,9 @@ router.post('/confirm/:id', async(req, res) => {
     let restaurant = await restaurantData.get(req.params.id);
     let allRestaurants = await restaurantData.getAll();
     let allReservationsByCustomer = await reservationsData.getAllFromCustomer(req.session.customer._id);
-    
+
     var currentDate = new Date();
-    var chosenDate = Date.parse(date);
+    var chosenDate = new Date(date + ':' + time);
 
     if(currentDate > chosenDate){
         res.render("reservation/table", {hasError: true, errors: ["Reservation date is invalid"],restaurant: restaurant});
