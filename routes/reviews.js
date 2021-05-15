@@ -6,6 +6,7 @@ const customerData = require('../data/customers');
 const restaurantData = require('../data/restaurants');
 const reviewsData = require('../data/reviews');
 const path = require('path');
+const { write } = require('fs');
 
 
 router.get('/', async(req, res) => {
@@ -57,13 +58,23 @@ router.post('/customer/:id', async(req, res) => {
     let rating = req.body.rating;
     let customer = req.session.customer;
     errors =[];
-    if (!review || typeof name !== 'string' || !name.trim()) errors.push('Invalid review.');
-    if (!rating || typeof name != 'number' || !rating.trim() || rating < 1 || !Number.isInteger(rating) ) errors.push('Invalid Rating.');
+    if (!review || typeof review !== 'string' || !review.trim()) {
+        errors.push('Invalid review.');
+        res.status(401).render('review/write',{errors:errors});
+        return;
+    }
+    console.log(rating)
+    if (!rating || typeof rating !== 'string' || !rating.trim() ||parseInt(rating) < 1 ||parseInt(rating) >5) {
+        errors.push('Invalid Rating.');
+        res.status(401).render('review/write',{errors:errors});
+        return;
+    }
+
     let restaurant;
     try {
         restaurant = await restaurantData.get(req.params.id);
     } catch (e) {
-        res.status(500).json({error: e.toString()});
+        res.status(500).json();
     }
     if(review.trim() == ''){
         //render the error message on the page
@@ -74,9 +85,9 @@ router.post('/customer/:id', async(req, res) => {
     }else{
         try{
             let createdReview = await reviewsData.create(restaurant._id.toString(), customer._id.toString(), review, Number.parseInt(rating));
-            res.redirect('/reviews/restaurant/' + req.params.id,{error : errors});
+            res.redirect('/reviews/restaurant/' + req.params.id);
         }catch(e){
-            res.status(500).json({error: e.toString()});
+            res.status(500).json();
         }
     }
 });

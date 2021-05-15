@@ -17,7 +17,7 @@ const create = async function create(restaurantId, customerId, review, rating) {
         throw "Parameters cannot be empty strings.";
     }
     if (rating < 1 || rating > 5) {
-        throw "Number of guests must be between 1 and 10";
+        throw "Rating should be between 1 to 5";
     }
 
     try {
