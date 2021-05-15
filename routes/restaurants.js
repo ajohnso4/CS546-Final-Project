@@ -42,13 +42,36 @@ router.post('/register', async(req, res) => {
     let phone = restaurant.phone;
     let description = restaurant.description;
 
-    errors =[];
-    if (!name || typeof name !== 'string' || !name.trim()) errors.push('Invalid Name.');
-    if (!address || typeof address !== 'string' || !address.trim()) errors.push('Invalid address');
-    if (!phone || typeof phone != 'number' || !phone.trim()) errors.push('Invalid phone.');
-    if (!description || typeof description  !== 'string' || !description.trim()) errors.push('Invalid description .');
-    if (!password || typeof password !== 'string' || !password.trim()) errors.push('Invalid password.');
-    if (!email || typeof email !== 'string' || !email.trim()) errors.push('Invalid email.');
+    if (!name || typeof name !== 'string' || !name.trim()) {
+        res.status(401).render("restaurants/register", {layout: false,errors: ["Invalid Name Provided"]})
+        return;
+    }
+
+    if (!website || typeof website !== 'string' || !address.trim()) {
+        res.status(401).render("restaurants/register", {layout: false, errors: ["Invalid Website Provided"]})
+        return;
+    }
+
+    if (!address || typeof address !== 'string' || !address.trim()) {
+        res.status(401).render("restaurants/register", {layout: false,  errors: ["Invalid Address Provided"]})
+        return;
+    }
+    if (!phone || typeof phone != 'number' || !phone.trim()) {
+        res.status(401).render("restaurants/register", {layout: false,  errors: ["Invalid Phone Number Provided"]})
+        return;
+    }
+    if (!description || typeof description  !== 'string' || !description.trim()) {
+        res.status(401).render("restaurants/register", {layout: false, errors: ["Invalid Description Provided"]})
+        return;
+    }
+    if (!password || typeof password !== 'string' || !password.trim()) {
+        res.status(401).render("restaurants/register", {layout: false, errors: ["Invalid Passowrd Provided"]})
+        return;
+    }
+    if (!email || typeof email !== 'string' || !email.trim()) {
+        res.status(401).render("restaurants/register", {layout: false,  errors: ["Invalid Email Provided"]})
+        return;
+    }
     try{
         restaurantDetails = await restaurantData.create(restaurant.name, restaurant.website, restaurant.address, restaurant.email, restaurant.phone,
                                         restaurant.description, password);
@@ -56,7 +79,7 @@ router.post('/register', async(req, res) => {
         console.log(restaurantDetails);
         res.redirect('/restaurants/private');
     }catch(e){
-        res.status(500).render("restaurants/register", {layout: false, hasError: true, errors: errors});
+        res.status(500).render("restaurants/register", {layout: false, errors: ["Provide Valid Details"]});
     }
 });
 
@@ -71,22 +94,29 @@ router.get('/login', async(req, res) => {
 router.post('/login', async(req, res) => {
     let restaurantName = req.body.restaurantName;
     let password = req.body.password;
-    errors =[];
-    if (!restaurantName || typeof restaurantName !== 'string' || !restaurantName.trim()) errors.push('Invalid Restaurant Name.');
-    if (!password || typeof password !== 'string' || !password.trim()) errors.push('Invalid password');
+    
+    if (!restaurantName || typeof restaurantName !== 'string' || !restaurantName.trim()){
+        res.status(401).render("restaurants/login", {layout: false, errors: ["Invalid Name Provided"]})
+        return;
+    }
+    if (!password || typeof password !== 'string' || !password.trim()) {
+        res.status(401).render("restaurants/login", {layout: false, errors: ["Invalid Password Provided"]})
+        return;
+    }
     let restaurant;
     try {
         let restaurantId = await restaurantData.getId(restaurantName);
         restaurant = await restaurantData.get(restaurantId);
     } catch (e) {
-        res.status(401).render("restaurants/login",{errors:errors, hasError: true});
+        res.status(500).render("restaurants/login",{errors:["invalid Info"]});
     }
     
     if(restaurant){
 
         let validPwd = await bcrypt.compareSync(password, restaurant.passwordHash);
         if(!validPwd){
-            res.status(401).render("restaurants/login",{errors:["Invalid password"], hasError: true});
+            res.status(401).render("restaurants/login",{errors:["Invalid password"]
+        });
             return;
         }
        
@@ -94,12 +124,12 @@ router.post('/login', async(req, res) => {
         res.redirect("/restaurants/private");
     }
 
-    if(!req.session.restaurant){
-        res.status(401).render("restaurants/login", {layouts: false,
-            errors: ['Provide username', 'Provide password'], hasError: true
-        })
-        return;
-    }
+    // if(!req.session.restaurant){
+    //     res.status(401).render("restaurants/login", {layouts: false,
+    //         errors: ['Provide username', 'Provide password'], hasError: true
+    //     })
+    //     return;
+    // }
     
 });
 
