@@ -1,0 +1,64 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/public/css/site.css" />
+</head>
+
+<body>
+<section>
+    <nav class="topnav">
+        <a href="/restaurants/private">Profile</a>
+        <a href="/restaurants/reservation">No. of Reservation</a>
+        <a class="active" href="/reviews/restaurant/{{restaurant._id}}">Review</a>
+    </nav>
+</section>
+{{#if showForm}}
+    <form method="POST" action="/reviews/customer/{{restaurant._id}}" id="review-form" novalidate>
+            <div class="container">
+                <div class="col form-group">
+                    <label for="rating">Rating</label>
+                    <input type="number" class="form-control" id="rating" name="rating" placeholder="Give rating">
+                </div>
+                <div class="col form-group">
+                    <label for="review">Write review</label>
+                    <input type="text" class="form-control" id="review" name="review" placeholder="write review">
+                </div>
+                <div id="review">
+                    <button type="submit" class="btn" name="submitButton" id="submitButton">Write Review</button>
+                </div>
+            </div>
+            {{#each errors}}
+                <div class = "error">{{this}}</div>
+            {{/each}}
+    </form>
+{{/if}}
+{{#if hasReview}}
+    <div class="col align-self-center">
+        <h3>Your Review</h1>
+        <h4>{{review.fullName}}</h4>
+        <h4>{{review.rating}}</h4>
+        <h4>{{review.review}}</h4>
+        <form action="/reviews/delete/{{review._id}}" method="POST">
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+    </div>
+{{/if}}
+<h1>Reviews for {{restaurant.name}}</h1>
+<div class ="content">
+    <section>
+        {{#each restaurant.reviews}}
+        <div class="card">
+            <div class="container">
+                <h3>{{this.fullName}}</h3><br>
+                <h4>{{this.rating}}</h4>
+                <h4>{{this.review}}</h4>
+            </div>
+        </div>
+        {{/each}}
+    </section>
+
+</div>
