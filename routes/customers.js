@@ -7,6 +7,7 @@ const reservationData = require('../data/reservations');
 const reviewsData = require('../data/reviews');
 const bcrypt = require('bcryptjs');
 const e = require('express');
+const xss = require('xss')
 
 router.get('/', async (req, res) => {
     let customers = await customerData.getAll();
@@ -26,11 +27,20 @@ router.post('/register', async (req, res) => {
     let city = req.body.city;
     let state = req.body.state;
     let password = req.body.password;
+    errors =[];
+    if (!firstName || typeof firstName !== 'string' || !firstName.trim()) errors.push('Invalid firstName.');
+    if (!lastName || typeof lastName !== 'string' || !lastName.trim()) errors.push('Invalid lastName.');
+    if (!phone || typeof phone !== 'number' || !phone.trim()) errors.push('Invalid phone.');
+    if (!city || typeof city !== 'string' || !city.trim()) errors.push('Invalid city.');
+    if (!state || typeof state !== 'string' || !state.trim()) errors.push('Invalid state.');
+    if (!password || typeof password !== 'string' || !password.trim()) errors.push('Invalid password.');
+    if (!email || typeof email !== 'string' || !email.trim()) errors.push('Invalid email.');
+
     const hashedPassword = await bcrypt.hash(password, 16);
     try {
         let customer = await customerData.create(firstName, lastName, email, phone, city, state, hashedPassword);
         req.session.customer = customer
-        res.redirect('/customers/private');
+        res.redirect('/customers/private',{ errors: errors });
     } catch (e) {
         res.status(500).json({ error: e });
     }
@@ -45,12 +55,12 @@ router.get('/login', async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-    let email = req.body.email;
-    let password = req.body.password;
+    let email = xss(req.body.email);
+    let password = xss(req.body.password);
     if (email && password) {
         let userID = await customerData.getfromEmail(email);
         if(userID == -1){
-            res.render("users/login", {title: "Login Screen", errors: ["Invalid email"]});
+            res.render("users/login", {title: "Login Screen", errors:["Invalid Email ID"]});
         }else{
         console.log(userID);
         let customer = await customerData.get(userID)
