@@ -56,6 +56,9 @@ router.post('/customer/:id', async(req, res) => {
     let review = req.body.review;
     let rating = req.body.rating;
     let customer = req.session.customer;
+    errors =[];
+    if (!review || typeof name !== 'string' || !name.trim()) errors.push('Invalid review.');
+    if (!rating || typeof name != 'number' || !rating.trim() || rating < 1 || !Number.isInteger(rating) ) errors.push('Invalid Rating.');
     let restaurant;
     try {
         restaurant = await restaurantData.get(req.params.id);
@@ -71,7 +74,7 @@ router.post('/customer/:id', async(req, res) => {
     }else{
         try{
             let createdReview = await reviewsData.create(restaurant._id.toString(), customer._id.toString(), review, Number.parseInt(rating));
-            res.redirect('/reviews/restaurant/' + req.params.id);
+            res.redirect('/reviews/restaurant/' + req.params.id,{error : errors});
         }catch(e){
             res.status(500).json({error: e.toString()});
         }

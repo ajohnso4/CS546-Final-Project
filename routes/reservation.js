@@ -81,6 +81,10 @@ router.post('/customer/:id', async(req, res) => {
     let reservationDate = req.body.reservationDate;
     let reservationTime = req.body.reservationTime;
     let restaurantno_of_guests = req.body.no_of_guests;
+    errors =[];
+    if ( typeof reservationDate != 'number' || !reservationDate.trim()) errors.push('Invalid Reservation Date.');
+    if ( typeof reservationTime != 'number' || !reservationTime.trim()) errors.push('Invalid Reservation Time');
+    if ( typeof restaurantno_of_guests != 'number' || !restaurantno_of_guests.trim() || restaurantno_of_guests < 1 || !Number.isInteger(restaurantno_of_guests) ) errors.push('Invalid phone.');
     if(reservationDate.trim() == ''){
         //render the error that reservationDate is missing
         console.log('Reservation Date  cannot be blank!');
@@ -95,7 +99,7 @@ router.post('/customer/:id', async(req, res) => {
             let createdReservation = await reservationsData.create(restaurant._id, req.params.id, reservationDate, reservationTime,restaurantno_of_guests);
             res.json(createdReservation);
         }catch(e){
-            res.status(500).json({error: e});
+            res.status(500).json({error: errors});
         }
     }
 });
