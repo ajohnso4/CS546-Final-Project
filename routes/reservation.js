@@ -33,8 +33,13 @@ router.post('/confirm/:id', async(req, res) => {
     let restaurant = await restaurantData.get(req.params.id);
     let allRestaurants = await restaurantData.getAll();
     let allReservationsByCustomer = await reservationsData.getAllFromCustomer(req.session.customer._id);
+    
+    var currentDate = new Date().toJSON().slice(0, 10);
+    if(currentDate > date){
+        res.render("reservation/customerReservation", {hasError: true, errors: ["Reservation date is invalid"]});
+    }
+    else{
     for (let item of allReservationsByCustomer) {
-        console.log(item);
         if (item.reservationTime == time && item.reservationDate == date) {
             res.render("reservation/customerReservation", {hasError: true, errors: ["Reservation already made for time."]})
         }
@@ -45,6 +50,7 @@ router.post('/confirm/:id', async(req, res) => {
     }catch(e){
         res.render("reservation/table", {restaurant: restaurant, customer: req.session.customer, error: e});
     }
+}
 });
 
 router.get('/restaurant/:id', async(req, res) => {
