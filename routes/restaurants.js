@@ -56,7 +56,7 @@ router.post('/register', async(req, res) => {
         res.status(401).render("restaurants/register", {layout: false,  errors: ["Invalid Address Provided"]})
         return;
     }
-    if (!phone || typeof phone != 'number' || !phone.trim()) {
+    if (!phone || typeof phone !== 'string' || !phone.trim()) {
         res.status(401).render("restaurants/register", {layout: false,  errors: ["Invalid Phone Number Provided"]})
         return;
     }

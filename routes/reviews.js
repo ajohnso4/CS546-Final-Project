@@ -28,14 +28,9 @@ router.get('/restaurant/:id', async(req, res) =>{
         let restaurant = await restaurantData.get(req.params.id);
         let customer = req.session.customer;
         if (customer) {
-            reviewed = await reviewsData.hasReviewed(req.params.id, customer.reviews);
-            if (reviewed) {
-                res.render('review/restaurantReview', {restaurant: restaurant, showForm: true, hasReview: true, review: reviewed});
-            } else {
-                res.render('review/restaurantReview', {restaurant: restaurant, showForm: true, hasReview: false});
-            }
+            res.render('review/restaurantReview', {restaurant: restaurant, showForm: true});
         } else {
-            res.render('review/customerReview', {restaurant: restaurant, showForm: false, hasReview: false});
+            res.render('review/restaurantReview', {restaurant: restaurant, showForm: false, hasReview: false});
         }
         
     }catch(e){
@@ -53,29 +48,30 @@ router.get('/customer/:id', async(req, res) => {
     }
 });
 
-router.post('/customer/:id', async(req, res) => {
+router.post('/restaurant/:id', async(req, res) => {
     let review = req.body.review;
     let rating = req.body.rating;
     let customer = req.session.customer;
     errors =[];
-    if (!review || typeof review !== 'string' || !review.trim()) {
-        errors.push('Invalid review.');
-        res.status(401).render('review/write',{errors:errors});
-        return;
-    }
-    console.log(rating)
-    if (!rating || typeof rating !== 'string' || !rating.trim() ||parseInt(rating) < 1 ||parseInt(rating) >5) {
-        errors.push('Invalid Rating.');
-        res.status(401).render('review/write',{errors:errors});
-        return;
-    }
-
     let restaurant;
     try {
         restaurant = await restaurantData.get(req.params.id);
     } catch (e) {
         res.status(500).json();
     }
+
+    if (!review || typeof review !== 'string' || !review.trim()) {
+        errors.push('Invalid review.');
+        res.status(401).render('review/restaurantReview', {restaurant: restaurant, showForm: true, errors: errors});
+        return;
+    }
+    console.log(rating)
+    if (!rating || typeof rating !== 'string' || !rating.trim() ||parseInt(rating) < 1 ||parseInt(rating) >5) {
+        errors.push('Invalid Rating.');
+        res.status(401).render('review/restaurantReview', {restaurant: restaurant, showForm: true, errors: errors});
+        return;
+    }
+    
     if(review.trim() == ''){
         //render the error message on the page
         console.log('Review Cannot be blank!');
