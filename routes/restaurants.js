@@ -35,6 +35,20 @@ router.post('/register', async(req, res) => {
     let restaurant = req.body;
     const password = await bcrypt.hash(restaurant.passwordHash, 16);
     let restaurantDetails;
+    let name =restaurant.name;
+    let website = restaurant.website;
+    let address = restaurant.address; 
+    let email= restaurant.email;
+    let phone = restaurant.phone;
+    let description = restaurant.description;
+
+    errors =[];
+    if (!name || typeof name !== 'string' || !name.trim()) errors.push('Invalid Name.');
+    if (!address || typeof address !== 'string' || !address.trim()) errors.push('Invalid address');
+    if (!phone || typeof phone != 'number' || !phone.trim()) errors.push('Invalid phone.');
+    if (!description || typeof description  !== 'string' || !description.trim()) errors.push('Invalid description .');
+    if (!password || typeof password !== 'string' || !password.trim()) errors.push('Invalid password.');
+    if (!email || typeof email !== 'string' || !email.trim()) errors.push('Invalid email.');
     try{
         restaurantDetails = await restaurantData.create(restaurant.name, restaurant.website, restaurant.address, restaurant.email, restaurant.phone,
                                         restaurant.description, password);
@@ -42,7 +56,7 @@ router.post('/register', async(req, res) => {
         console.log(restaurantDetails);
         res.redirect('/restaurants/private');
     }catch(e){
-        res.status(500).render("restaurants/register", {layout: false, hasError: true, errors: [e]});
+        res.status(500).render("restaurants/register", {layout: false, hasError: true, errors: errors});
     }
 });
 
@@ -57,12 +71,15 @@ router.get('/login', async(req, res) => {
 router.post('/login', async(req, res) => {
     let restaurantName = req.body.restaurantName;
     let password = req.body.password;
+    errors =[];
+    if (!restaurantName || typeof restaurantName !== 'string' || !restaurantName.trim()) errors.push('Invalid Restaurant Name.');
+    if (!password || typeof password !== 'string' || !password.trim()) errors.push('Invalid password');
     let restaurant;
     try {
         let restaurantId = await restaurantData.getId(restaurantName);
         restaurant = await restaurantData.get(restaurantId);
     } catch (e) {
-        res.status(401).render("restaurants/login",{errors:[e], hasError: true});
+        res.status(401).render("restaurants/login",{errors:errors, hasError: true});
     }
     
     if(restaurant){
