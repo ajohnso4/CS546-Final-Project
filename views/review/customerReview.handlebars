@@ -5,19 +5,21 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="/public/css/site.css" />
+    <link rel="stylesheet" href="../../public/css/cards.css">
 </head>
 
 <body>
 <section>
     <nav class="topnav">
-        <a href="/restaurants/private">Profile</a>
-        <a href="/restaurants/reservation">No. of Reservation</a>
-        <a class="active" href="/reviews/restaurant/{{restaurant._id}}">Review</a>
+        {{!-- <a href="/">Home</a> --}}
+        <a class="active" href="/customers/private">Profile</a>
+        <a href="/reservations">Book a Table</a>
+        <a href="/customers/reservations">Reservations Made</a>
+        <a href="/reviews">Write Review</a>
     </nav>
 </section>
 {{#if showForm}}
-    <form method="POST" action="/reviews/customer/{{restaurant._id}}" id="review-form" novalidate>
+    <form method="POST" action="/reviews/restaurant/{{restaurant._id}}" id="review-form" novalidate>
             <div class="container">
                 <div class="col form-group">
                     <label for="rating">Rating</label>
@@ -42,7 +44,7 @@
         {{#each restaurant.reviews}}
         <div class="card">
             <div class="container">
-                <h3>{{this.fullName}}</h3><br>
+                <h3>{{this.fullName}}</h3>
                 <h4>{{this.rating}}</h4>
                 <h4>{{this.review}}</h4>
             </div>

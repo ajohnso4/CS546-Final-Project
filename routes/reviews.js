@@ -28,7 +28,7 @@ router.get('/restaurant/:id', async(req, res) =>{
         let restaurant = await restaurantData.get(req.params.id);
         let customer = req.session.customer;
         if (customer) {
-            res.render('review/restaurantReview', {restaurant: restaurant, showForm: true});
+            res.render('review/customerReview', {restaurant: restaurant, showForm: true});
         } else {
             res.render('review/restaurantReview', {restaurant: restaurant, showForm: false, hasReview: false});
         }
@@ -62,13 +62,13 @@ router.post('/restaurant/:id', async(req, res) => {
 
     if (!review || typeof review !== 'string' || !review.trim()) {
         errors.push('Invalid review.');
-        res.status(401).render('review/restaurantReview', {restaurant: restaurant, showForm: true, errors: errors});
+        res.status(401).render('review/customerReview', {restaurant: restaurant, showForm: true, errors: errors});
         return;
     }
     console.log(rating)
     if (!rating || typeof rating !== 'string' || !rating.trim() ||parseInt(rating) < 1 ||parseInt(rating) >5) {
         errors.push('Invalid Rating.');
-        res.status(401).render('review/restaurantReview', {restaurant: restaurant, showForm: true, errors: errors});
+        res.status(401).render('review/customerReview', {restaurant: restaurant, showForm: true, errors: errors});
         return;
     }
     
