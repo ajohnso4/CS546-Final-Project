@@ -34,7 +34,7 @@ router.get('/restaurant/:id', async(req, res) =>{
                 res.render('review/restaurantReview', {restaurant: restaurant, showForm: true, hasReview: false});
             }
         } else {
-            res.render('review/restaurantReview', {restaurant: restaurant, showForm: false, hasReview: false});
+            res.render('review/customerReview', {restaurant: restaurant, showForm: false, hasReview: false});
         }
         
     }catch(e){
