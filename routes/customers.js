@@ -27,14 +27,44 @@ router.post('/register', async (req, res) => {
     let city = req.body.city;
     let state = req.body.state;
     let password = req.body.password;
-    errors =[];
-    if (!firstName || typeof firstName !== 'string' || !firstName.trim()) errors.push('Invalid firstName.');
-    if (!lastName || typeof lastName !== 'string' || !lastName.trim()) errors.push('Invalid lastName.');
-    if (!phone || typeof phone !== 'number' || !phone.trim()) errors.push('Invalid phone.');
-    if (!city || typeof city !== 'string' || !city.trim()) errors.push('Invalid city.');
-    if (!state || typeof state !== 'string' || !state.trim()) errors.push('Invalid state.');
-    if (!password || typeof password !== 'string' || !password.trim()) errors.push('Invalid password.');
-    if (!email || typeof email !== 'string' || !email.trim()) errors.push('Invalid email.');
+    let errors = [];
+
+    if (!firstName || typeof firstName !== 'string' || !firstName.trim()) {
+        errors.push("Invalid first name")
+        res.status(401).render('users/signup', {errors: errors})
+        return;
+     }
+    if (!lastName || typeof lastName !== 'string' || !lastName.trim()){
+        errors.push("Invalid last name")
+        res.status(401).render('users/signup', {errors: ["Invalid last name"]})
+        return;
+     }
+     
+    if (!phone || typeof phone !== 'number' || !phone.trim()) {
+        errors.push("Invalid phone")
+        res.status(401).render('users/signup', {errors: errors})
+        return;
+     }
+    if (!city || typeof city !== 'string' || !city.trim()) {
+        errors.push("Invalid city")
+        res.status(401).render('users/signup', {errors: errors})
+        return;
+     }
+    if (!state || typeof state !== 'string' || !state.trim()) {
+        errors.push("Invalid state")
+        res.status(401).render('users/signup', {errors: errors})
+        return;
+     }
+    if (!password || typeof password !== 'string' || !password.trim()) {
+        errors.push("Invalid password")
+        res.status(401).render('users/signup', {errors: errors})
+        return;
+     }
+    if (!email || typeof email !== 'string' || !email.trim()) {
+        errors.push("Invalid email")
+        res.status(401).render('users/signup', {errors: errors})
+        return;
+     }
 
     const hashedPassword = await bcrypt.hash(password, 16);
     try {
